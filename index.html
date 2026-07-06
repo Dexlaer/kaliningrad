@@ -144,10 +144,10 @@ a{color:var(--baltic)}
 /* map */
 .map-scroll{border-radius:var(--r);border:1px solid var(--line);background:var(--panel);overflow:hidden;touch-action:pan-y}
 .map-scroll svg{display:block;width:100%;height:auto}
-.map-nav{display:flex;align-items:center;gap:14px;margin-top:14px}
-.map-era{flex:1;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.06em;color:var(--amber)}
+.map-nav{display:flex;align-items:center;gap:10px;margin-top:14px}
+.map-nav .step-btn{flex:0 0 auto}
 .map-hint{font-size:12px;color:var(--muted);margin-top:10px;font-family:'IBM Plex Mono',monospace;text-align:center}
-.era-btns{display:flex;gap:8px;overflow-x:auto;padding:14px 0 4px;scrollbar-width:none}
+.era-btns{flex:1;min-width:0;display:flex;gap:8px;overflow-x:auto;padding:4px 2px;scrollbar-width:none}
 .era-btns::-webkit-scrollbar{display:none}
 .btn-era{flex:0 0 auto;background:transparent;border:1px solid var(--line);color:var(--muted);font:500 13px 'IBM Plex Sans',sans-serif;padding:9px 14px;border-radius:999px;cursor:pointer;transition:all .25s}
 .btn-era:hover{border-color:var(--amber);color:var(--parchment)}
@@ -308,7 +308,6 @@ a{color:var(--baltic)}
 <div class="kicker">Сигнатура места</div>
 <h2>Одна земля, шесть эпох</h2>
 <p class="sub">Листайте эпохи стрелками, свайпом по карте или кнопками с годами. Границы схематичны: важно не где линия, а чья земля.</p>
-<div class="era-btns" id="eraBtns"></div>
 <div class="map-scroll">
 <svg viewBox="0 0 800 500" role="img" aria-label="Схематическая карта юго-восточной Балтики по эпохам">
 <defs>
@@ -338,7 +337,7 @@ a{color:var(--baltic)}
 </div>
 <div class="map-nav">
 <button class="step-btn" id="mapPrev" aria-label="Предыдущая эпоха">←</button>
-<div class="map-era" id="mapEraLbl"></div>
+<div class="era-btns" id="eraBtns"></div>
 <button class="step-btn" id="mapNext" aria-label="Следующая эпоха">→</button>
 </div>
 <div class="map-hint">← свайп по карте листает эпохи →</div>
@@ -588,7 +587,7 @@ var ERAS=[
  cap:'Полуэксклав: посуху до остальной России — две границы, зато свои море и небо. Звезда — Калининград.',dz:'Гданьск',mem:'Клайпеда'}
 ];
 var btnBox=document.getElementById('eraBtns'),cap=document.getElementById('mapCap'),leg=document.getElementById('mapLeg'),
-    mapPrev=document.getElementById('mapPrev'),mapNext=document.getElementById('mapNext'),mapEraLbl=document.getElementById('mapEraLbl'),
+    mapPrev=document.getElementById('mapPrev'),mapNext=document.getElementById('mapNext'),
     curEra=0;
 function applyEra(i){
   var e=ERAS[i];curEra=i;
@@ -598,10 +597,11 @@ function applyEra(i){
   document.getElementById('lbl-dz').textContent=e.dz;
   document.getElementById('lbl-mem').textContent=e.mem;
   document.getElementById('lbl-kng').textContent=(e.k==='1945'||e.k==='now')?'Калининград':'Кёнигсберг';
-  mapEraLbl.textContent=e.btn;
   mapPrev.disabled=i===0;
   mapNext.disabled=i===ERAS.length-1;
   Array.prototype.forEach.call(btnBox.children,function(b,j){b.classList.toggle('active',j===i);});
+  var ab=btnBox.children[i];
+  if(ab)btnBox.scrollTo({left:ab.offsetLeft-(btnBox.clientWidth-ab.offsetWidth)/2,behavior:'smooth'});
 }
 ERAS.forEach(function(e,i){
   var b=document.createElement('button');b.className='btn-era';b.textContent=e.btn;
