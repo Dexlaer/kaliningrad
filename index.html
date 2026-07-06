@@ -28,14 +28,15 @@ body{
   position:relative;
   min-height:100vh;
   overflow-x:clip;
-  background-color:var(--ink);
+  background-color:#131009;
   color:var(--parchment);
   font-family:'IBM Plex Sans',system-ui,sans-serif;
   font-size:16.5px;line-height:1.62;
   background-image:
-    linear-gradient(180deg, #16120c 0%, #111918 22%, #17120c 44%, #0f181c 68%, #15100b 100%),
-    repeating-linear-gradient(90deg, rgba(235,223,200,.026) 0 1px, transparent 1px 92px),
-    repeating-linear-gradient(0deg, rgba(235,223,200,.018) 0 1px, transparent 1px 76px);
+    radial-gradient(1100px 720px at 82% -160px, rgba(226,154,60,.075), transparent 62%),
+    radial-gradient(950px 680px at -140px 22%, rgba(111,163,155,.06), transparent 62%),
+    radial-gradient(880px 620px at 108% 62%, rgba(74,111,165,.05), transparent 62%),
+    linear-gradient(180deg, #16120b 0%, #13110c 34%, #101314 64%, #14100a 100%);
   background-attachment:fixed;
   -webkit-font-smoothing:antialiased;
 }
@@ -45,12 +46,8 @@ body::before{
   inset:0;
   z-index:0;
   pointer-events:none;
-  background:
-    repeating-linear-gradient(115deg, rgba(235,223,200,.025) 0 1px, transparent 1px 13px),
-    linear-gradient(90deg, rgba(111,163,155,.08), transparent 18%, transparent 82%, rgba(226,154,60,.055)),
-    linear-gradient(180deg, rgba(20,16,9,.1), rgba(20,16,9,.42));
-  opacity:.55;
-  mix-blend-mode:screen;
+  opacity:.045;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>");
 }
 body>*{position:relative;z-index:1}
 .wrap{max-width:780px;margin:0 auto;padding:0 18px}
@@ -82,11 +79,9 @@ section::before{
   top:-28px;
   bottom:-28px;
   background:
-    radial-gradient(780px 360px at 18% 16%, var(--section-tint), transparent 62%),
-    radial-gradient(720px 340px at 86% 68%, var(--section-warm), transparent 64%),
-    repeating-linear-gradient(90deg, transparent 0 118px, rgba(235,223,200,.024) 119px 120px, transparent 121px 240px),
-    linear-gradient(180deg, rgba(20,16,9,.02), rgba(20,16,9,.18) 46%, rgba(20,16,9,.03));
-  opacity:.78;
+    radial-gradient(760px 340px at 16% 14%, var(--section-tint), transparent 64%),
+    radial-gradient(680px 320px at 86% 72%, var(--section-warm), transparent 66%);
+  opacity:.85;
 }
 a{color:var(--baltic)}
 
@@ -103,11 +98,9 @@ a{color:var(--baltic)}
   top:0;
   bottom:-58px;
   background:
-    radial-gradient(680px 360px at 16% 18%, rgba(111,163,155,.2), transparent 60%),
-    linear-gradient(135deg, rgba(15,41,45,.8) 0%, transparent 38%),
-    linear-gradient(24deg, transparent 0 43%, rgba(226,154,60,.095) 43% 44%, transparent 44% 100%),
-    repeating-linear-gradient(155deg, transparent 0 34px, rgba(235,223,200,.036) 35px 36px, transparent 37px 70px),
-    linear-gradient(180deg, rgba(20,16,9,.08), rgba(20,16,9,.86));
+    radial-gradient(760px 460px at 12% 22%, rgba(111,163,155,.17), transparent 62%),
+    radial-gradient(620px 420px at 90% 24%, rgba(226,154,60,.09), transparent 62%),
+    linear-gradient(180deg, rgba(20,16,9,0) 0%, rgba(20,16,9,.5) 88%);
 }
 .hero::after{
   content:'';
@@ -121,14 +114,20 @@ a{color:var(--baltic)}
 }
 .hero h1{font-size:clamp(42px,9vw,74px)}
 .hero .arrow{color:var(--amber);font-style:italic;font-weight:600}
+.hero .grad{background:linear-gradient(100deg,#f2d9a7 10%,var(--amber) 90%);-webkit-background-clip:text;background-clip:text;color:transparent}
 .hero p{margin-top:16px;color:#c7b99f;max-width:58ch;font-size:17px}
+.hero p b{color:var(--parchment);font-weight:500}
 .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
-.hero-link{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px 16px;border-radius:999px;border:1px solid var(--line);font:600 13.5px 'IBM Plex Sans',sans-serif;text-decoration:none;color:var(--parchment);background:rgba(30,24,17,.74);backdrop-filter:blur(8px)}
+.hero-link{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px 18px;border-radius:999px;border:1px solid var(--line);font:600 13.5px 'IBM Plex Sans',sans-serif;text-decoration:none;color:var(--parchment);background:rgba(30,24,17,.74);backdrop-filter:blur(8px);transition:border-color .2s,transform .2s}
 .hero-link.primary{background:var(--amber);border-color:var(--amber);color:#1a1207}
-.hero-link:hover{border-color:var(--amber)}
-.hero .strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:24px;max-width:640px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--baltic)}
+.hero-link:hover{border-color:var(--amber);transform:translateY(-1px)}
+.hero .strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:28px;max-width:640px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.03em;color:var(--muted)}
 .hero .strip span{padding-top:10px;border-top:1px solid rgba(226,154,60,.24)}
-.hero .strip span b{display:block;color:var(--parchment);font-weight:500;font-size:13px;margin-bottom:2px}
+.hero .strip span b{display:block;font-family:'Cormorant',serif;font-weight:700;font-size:26px;line-height:1.15;color:var(--parchment);margin-bottom:2px}
+.scroll-hint{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);color:var(--muted);text-decoration:none;font-size:18px;line-height:1;animation:bob 2.2s ease-in-out infinite}
+.scroll-hint:hover{color:var(--amber)}
+@keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,6px)}}
+@media(max-height:620px){.scroll-hint{display:none}}
 
 #map{--section-tint:rgba(111,163,155,.11);--section-warm:rgba(226,154,60,.03)}
 #why{--section-tint:rgba(74,111,165,.075);--section-warm:rgba(226,154,60,.04)}
@@ -143,9 +142,11 @@ a{color:var(--baltic)}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px}
 
 /* map */
-.map-scroll{overflow-x:auto;border-radius:var(--r);border:1px solid var(--line);background:var(--panel)}
-.map-scroll svg{display:block;min-width:660px;width:100%;height:auto}
-.map-hint{font-size:12px;color:var(--muted);margin-top:6px;font-family:'IBM Plex Mono',monospace}
+.map-scroll{border-radius:var(--r);border:1px solid var(--line);background:var(--panel);overflow:hidden;touch-action:pan-y}
+.map-scroll svg{display:block;width:100%;height:auto}
+.map-nav{display:flex;align-items:center;gap:14px;margin-top:14px}
+.map-era{flex:1;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.06em;color:var(--amber)}
+.map-hint{font-size:12px;color:var(--muted);margin-top:10px;font-family:'IBM Plex Mono',monospace;text-align:center}
 .era-btns{display:flex;gap:8px;overflow-x:auto;padding:14px 0 4px;scrollbar-width:none}
 .era-btns::-webkit-scrollbar{display:none}
 .btn-era{flex:0 0 auto;background:transparent;border:1px solid var(--line);color:var(--muted);font:500 13px 'IBM Plex Sans',sans-serif;padding:9px 14px;border-radius:999px;cursor:pointer;transition:all .25s}
@@ -155,13 +156,9 @@ a{color:var(--baltic)}
 .legend{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:12px}
 .lg{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--muted)}
 .sw{width:14px;height:14px;border-radius:4px;border:1px solid rgba(0,0,0,.4)}
-.region{transition:fill .8s ease;stroke:#0d0a06;stroke-width:2}
-.city-lbl{font:500 19px 'IBM Plex Sans',sans-serif;fill:#f2e8d5;paint-order:stroke;stroke:#0d0a06;stroke-width:4px;stroke-linejoin:round}
-.sea-lbl{font:italic 600 24px 'Cormorant',serif;fill:rgba(180,214,208,.5);letter-spacing:.08em}
-#you{opacity:0;transition:opacity .8s}
-#you.show{opacity:1}
-.pulse{animation:pulse 2s infinite}
-@keyframes pulse{0%{r:6}50%{r:10}100%{r:6}}
+.region{transition:fill .8s ease;stroke:#0c1318;stroke-width:1.6;stroke-linejoin:round}
+.city-lbl{font:500 22px 'IBM Plex Sans',sans-serif;fill:#f2e8d5;paint-order:stroke;stroke:#0d1116;stroke-width:5px;stroke-linejoin:round}
+.sea-lbl{font:italic 600 30px 'Cormorant',serif;fill:rgba(180,214,208,.5);letter-spacing:.08em}
 
 /* stepper */
 .stepper{margin-top:18px}
@@ -279,19 +276,21 @@ a{color:var(--baltic)}
 </head>
 <body>
 <header class="hero wrap">
-<div class="kicker">Интерактивная история · Калининградская область</div>
-<h1>Кёнигсберг <span class="arrow">→</span> Калининград</h1>
-<p>За несколько минут пройти 800 лет одной земли: от прусских племён и Тевтонского ордена до советского Калининграда и российского полуэксклава между Польшей, Литвой и Балтикой.</p>
+<div class="kicker">Интерактивная история · 800 лет</div>
+<h1>Кёнигсберг <span class="arrow">→</span> <span class="grad">Калининград</span></h1>
+<p>Сайт-путешествие на несколько минут: как земля пруссов стала орденом, королевством, собравшим Германию, — и самым западным регионом России. Внутри — <b>карта эпох</b>, <b>игра с мостами Эйлера</b>, <b>хронология</b> и <b>квиз</b>.</p>
 <div class="hero-actions">
 <a class="hero-link primary" href="#map">Начать с карты</a>
 <a class="hero-link" href="#why">Почему эксклав</a>
+<a class="hero-link" href="#quiz">Сразу к квизу</a>
 </div>
 <div class="strip">
-<span><b>1255</b> — основан город</span>
-<span><b>4</b> государства сменились</span>
-<span><b>1946</b> — смена имени</span>
-<span><b>1991</b> — стал эксклавом</span>
+<span><b>1255</b>основан город</span>
+<span><b>4</b>государства сменились</span>
+<span><b>1946</b>смена имени</span>
+<span><b>1991</b>стал эксклавом</span>
 </div>
+<a class="scroll-hint" href="#map" aria-label="Листать вниз">↓</a>
 </header>
 
 <nav class="nav"><div class="nav-in">
@@ -308,38 +307,42 @@ a{color:var(--baltic)}
 <section id="map" class="wrap">
 <div class="kicker">Сигнатура места</div>
 <h2>Одна земля, шесть эпох</h2>
-<p class="sub">Нажимайте на годы — карта перекрашивается. Границы схематичны: важно не где линия, а чья земля.</p>
+<p class="sub">Листайте эпохи стрелками, свайпом по карте или кнопками с годами. Границы схематичны: важно не где линия, а чья земля.</p>
 <div class="era-btns" id="eraBtns"></div>
 <div class="map-scroll">
-<svg viewBox="0 0 840 560" role="img" aria-label="Схематическая карта юго-восточной Балтики по эпохам">
+<svg viewBox="0 0 800 500" role="img" aria-label="Схематическая карта юго-восточной Балтики по эпохам">
 <defs>
 <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
 <stop offset="0" stop-color="#12262c"/><stop offset="1" stop-color="#1a3138"/>
 </linearGradient>
 </defs>
-<rect x="0" y="0" width="840" height="560" fill="url(#sea)"/>
-<text class="sea-lbl" x="330" y="120">Балтийское море</text>
-<path id="r-pl" class="region" d="M302,392 Q450,404 578,368 L628,410 L800,412 L800,560 L302,560 Z"/>
-<path id="r-de" class="region" d="M40,318 Q140,296 220,300 Q268,302 302,292 L302,560 L40,560 Z"/>
-<path id="r-lt" class="region" d="M578,334 L600,312 L640,230 Q696,212 748,224 L800,244 L800,410 Q708,404 628,408 L578,362 Z"/>
-<path id="r-cor" class="region" d="M302,292 Q320,286 336,290 L340,392 L302,392 Z"/>
-<path id="r-epn" class="region" d="M356,306 Q366,270 402,258 Q428,230 454,250 Q504,258 548,262 Q574,266 578,300 L578,334 L356,334 Z"/>
-<path id="r-eps" class="region" d="M356,334 L578,334 L578,362 Q574,398 540,404 L392,410 Q360,406 356,382 Z"/>
-<path id="r-mem" class="region" d="M578,300 L578,268 Q596,238 616,222 L640,230 Q622,258 610,286 L600,312 Z"/>
-<path id="r-dz" class="region" d="M336,290 Q352,278 366,286 L368,308 L344,310 Z"/>
-<path id="r-bb" class="region" d="M120,352 Q180,344 244,350 L244,470 Q180,478 120,470 Z" stroke-opacity="0.25"/>
-<path d="M446,254 Q500,232 570,220" fill="none" stroke="#7d6c4d" stroke-width="4" stroke-linecap="round"/>
-<path d="M362,300 Q392,286 420,282" fill="none" stroke="#7d6c4d" stroke-width="3" stroke-linecap="round"/>
-<g><circle cx="150" cy="392" r="4.5" fill="#f2e8d5" stroke="#0d0a06" stroke-width="1.5"/><text class="city-lbl" x="138" y="418">Берлин</text></g>
-<g><circle cx="352" cy="296" r="4.5" fill="#f2e8d5" stroke="#0d0a06" stroke-width="1.5"/><text class="city-lbl" x="286" y="330" id="lbl-dz">Гданьск</text></g>
-<g><circle cx="690" cy="330" r="4.5" fill="#f2e8d5" stroke="#0d0a06" stroke-width="1.5"/><text class="city-lbl" x="652" y="356">Вильнюс</text></g>
-<g><circle cx="470" cy="472" r="4.5" fill="#f2e8d5" stroke="#0d0a06" stroke-width="1.5"/><text class="city-lbl" x="428" y="498">Варшава</text></g>
-<g><circle cx="600" cy="256" r="4.5" fill="#f2e8d5" stroke="#0d0a06" stroke-width="1.5"/><text class="city-lbl" x="608" y="248" id="lbl-mem">Мемель</text></g>
-<g><path d="M462,290 l3.8,7.7 8.5,1.2 -6.1,6 1.4,8.4 -7.6,-4 -7.6,4 1.4,-8.4 -6.1,-6 8.5,-1.2 Z" fill="#f6d78f" stroke="#0d0a06" stroke-width="1.5"/><text class="city-lbl" x="400" y="330" id="lbl-kng">Кёнигсберг</text></g>
-<g id="you"><circle class="pulse" cx="452" cy="282" r="6" fill="#e29a3c" stroke="#0d0a06" stroke-width="2"/><text class="city-lbl" x="352" y="272" fill="#e29a3c">вы здесь</text></g>
+<rect x="0" y="0" width="800" height="500" fill="url(#sea)"/>
+<text class="sea-lbl" x="300" y="112">Балтийское море</text>
+<path id="r-pl" class="region" d="M256,380 L306,380 Q310,400 312,414 L566,414 L800,430 L800,500 L256,500 Z"/>
+<path id="r-de" class="region" d="M0,334 Q90,318 170,309 Q215,304 256,302 L256,500 L0,500 Z"/>
+<path id="r-lt" class="region" d="M638,226 Q718,206 800,198 L800,430 L566,414 L566,302 L604,292 Z"/>
+<path id="r-cor" class="region" d="M256,302 Q280,304 302,309 L306,380 L256,380 Z"/>
+<path id="r-dz" class="region" d="M302,309 Q322,298 346,292 L340,344 L312,348 Z"/>
+<path id="r-epn" class="region" d="M346,292 Q420,283 495,271 L560,256 L566,302 L566,346 L346,346 Z"/>
+<path id="r-eps" class="region" d="M312,348 L340,344 L346,346 L566,346 L566,414 L312,414 Z"/>
+<path id="r-mem" class="region" d="M560,256 Q600,241 638,226 L604,292 L566,302 Z"/>
+<path id="r-bb" class="region" d="M64,362 L204,362 L204,468 L64,468 Z" stroke-opacity="0.25"/>
+<path d="M448,280 Q530,252 612,216" fill="none" stroke="#7d6c4d" stroke-width="4.5" stroke-linecap="round"/>
+<path d="M340,308 Q390,296 426,290" fill="none" stroke="#7d6c4d" stroke-width="3" stroke-linecap="round"/>
+<g><circle cx="122" cy="404" r="5" fill="#f2e8d5" stroke="#0d1116" stroke-width="1.5"/><text class="city-lbl" x="92" y="432">Берлин</text></g>
+<g><circle cx="322" cy="320" r="5" fill="#f2e8d5" stroke="#0d1116" stroke-width="1.5"/><text class="city-lbl" x="252" y="350" id="lbl-dz">Гданьск</text></g>
+<g><circle cx="700" cy="332" r="5" fill="#f2e8d5" stroke="#0d1116" stroke-width="1.5"/><text class="city-lbl" x="662" y="360">Вильнюс</text></g>
+<g><circle cx="560" cy="452" r="5" fill="#f2e8d5" stroke="#0d1116" stroke-width="1.5"/><text class="city-lbl" x="518" y="480">Варшава</text></g>
+<g><circle cx="600" cy="244" r="5" fill="#f2e8d5" stroke="#0d1116" stroke-width="1.5"/><text class="city-lbl" x="612" y="238" id="lbl-mem">Мемель</text></g>
+<g><path d="M432,286 l4.2,8.5 9.4,1.4 -6.8,6.6 1.6,9.3 -8.4,-4.4 -8.4,4.4 1.6,-9.3 -6.8,-6.6 9.4,-1.4 Z" fill="#f6d78f" stroke="#0d1116" stroke-width="1.5"/><text class="city-lbl" x="352" y="338" id="lbl-kng">Кёнигсберг</text></g>
 </svg>
 </div>
-<div class="map-hint">↔ карту можно двигать пальцем</div>
+<div class="map-nav">
+<button class="step-btn" id="mapPrev" aria-label="Предыдущая эпоха">←</button>
+<div class="map-era" id="mapEraLbl"></div>
+<button class="step-btn" id="mapNext" aria-label="Следующая эпоха">→</button>
+</div>
+<div class="map-hint">← свайп по карте листает эпохи →</div>
 <p class="map-caption" id="mapCap"></p>
 <div class="legend" id="mapLeg"></div>
 </section>
@@ -583,24 +586,41 @@ var ERAS=[
  cap:'Потсдам: север — СССР, юг — Польше, Мемель — Литовской ССР. Кёнигсберг становится Калининградом.',dz:'Гданьск',mem:'Клайпеда'},
 {k:'now',btn:'2026 · Сегодня',f:{de:C.neu,bb:C.neu,cor:C.pol,dz:C.pol,epn:C.amber,eps:C.pol,mem:C.lit,lt:C.lit,pl:C.pol},
  lg:[[C.amber,'Калининградская обл. (Россия)'],[C.pol,'Польша (ЕС, НАТО)'],[C.lit,'Литва (ЕС, НАТО)'],[C.neu,'Германия']],
- cap:'Полуэксклав: посуху до остальной России — две границы, зато свои море и небо. Звезда — Калининград, точка — вы.',dz:'Гданьск',mem:'Клайпеда'}
+ cap:'Полуэксклав: посуху до остальной России — две границы, зато свои море и небо. Звезда — Калининград.',dz:'Гданьск',mem:'Клайпеда'}
 ];
-var btnBox=document.getElementById('eraBtns'),cap=document.getElementById('mapCap'),leg=document.getElementById('mapLeg');
+var btnBox=document.getElementById('eraBtns'),cap=document.getElementById('mapCap'),leg=document.getElementById('mapLeg'),
+    mapPrev=document.getElementById('mapPrev'),mapNext=document.getElementById('mapNext'),mapEraLbl=document.getElementById('mapEraLbl'),
+    curEra=0;
 function applyEra(i){
-  var e=ERAS[i];
+  var e=ERAS[i];curEra=i;
   Object.keys(e.f).forEach(function(id){var el=document.getElementById('r-'+id);if(el)el.style.fill=e.f[id];});
   cap.textContent=e.cap;
   leg.innerHTML=e.lg.map(function(p){return '<span class="lg"><span class="sw" style="background:'+p[0]+'"></span>'+p[1]+'</span>';}).join('');
   document.getElementById('lbl-dz').textContent=e.dz;
   document.getElementById('lbl-mem').textContent=e.mem;
   document.getElementById('lbl-kng').textContent=(e.k==='1945'||e.k==='now')?'Калининград':'Кёнигсберг';
-  document.getElementById('you').classList.toggle('show',e.k==='now');
+  mapEraLbl.textContent=e.btn;
+  mapPrev.disabled=i===0;
+  mapNext.disabled=i===ERAS.length-1;
   Array.prototype.forEach.call(btnBox.children,function(b,j){b.classList.toggle('active',j===i);});
 }
 ERAS.forEach(function(e,i){
   var b=document.createElement('button');b.className='btn-era';b.textContent=e.btn;
   b.addEventListener('click',function(){applyEra(i);});btnBox.appendChild(b);
 });
+mapPrev.addEventListener('click',function(){if(curEra>0)applyEra(curEra-1);});
+mapNext.addEventListener('click',function(){if(curEra<ERAS.length-1)applyEra(curEra+1);});
+var mapBox=document.querySelector('.map-scroll'),swX=null,swY=null;
+mapBox.addEventListener('touchstart',function(ev){swX=ev.touches[0].clientX;swY=ev.touches[0].clientY;},{passive:true});
+mapBox.addEventListener('touchend',function(ev){
+  if(swX===null)return;
+  var dx=ev.changedTouches[0].clientX-swX,dy=ev.changedTouches[0].clientY-swY;
+  if(Math.abs(dx)>44&&Math.abs(dx)>Math.abs(dy)*1.4){
+    if(dx<0&&curEra<ERAS.length-1)applyEra(curEra+1);
+    else if(dx>0&&curEra>0)applyEra(curEra-1);
+  }
+  swX=null;
+},{passive:true});
 applyEra(5);
 
 /* ---------- STEPPER ---------- */
