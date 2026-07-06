@@ -124,6 +124,9 @@ a{color:var(--baltic)}
 .hero .strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:28px;max-width:640px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.03em;color:var(--muted)}
 .hero .strip span{padding-top:10px;border-top:1px solid rgba(226,154,60,.24)}
 .hero .strip span b{display:block;font-family:'Cormorant',serif;font-weight:700;font-size:26px;line-height:1.15;color:var(--parchment);margin-bottom:2px}
+.hero-art{position:absolute;right:-60px;bottom:26px;width:min(60%,620px);height:auto;z-index:-1;opacity:.34;pointer-events:none;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 30%);mask-image:linear-gradient(90deg,transparent 0,#000 30%)}
+@media(min-width:1200px){.hero-art{right:-360px;bottom:20px;width:860px;opacity:.38}}
+@media(max-width:900px){.hero-art{right:-40px;bottom:90px;width:78%;opacity:.2}}
 .scroll-hint{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);color:var(--muted);text-decoration:none;font-size:18px;line-height:1;animation:bob 2.2s ease-in-out infinite}
 .scroll-hint:hover{color:var(--amber)}
 @keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,6px)}}
@@ -290,6 +293,44 @@ a{color:var(--baltic)}
 <span><b>1946</b>смена имени</span>
 <span><b>1991</b>стал эксклавом</span>
 </div>
+<svg class="hero-art" viewBox="0 0 900 430" fill="none" aria-hidden="true">
+<g stroke="#e2b571" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+<circle cx="788" cy="84" r="26" opacity=".5"/>
+<path d="M252,118 q7,-8 14,0 q7,-8 14,0" opacity=".55"/>
+<path d="M330,88 q6,-7 12,0 q6,-7 12,0" opacity=".45"/>
+<path d="M568,72 q6,-7 12,0 q6,-7 12,0" opacity=".45"/>
+<g opacity=".75">
+<path d="M100,344 L100,262 L124,262 L124,244 L112,220 L136,196 L160,220 L148,244 L148,262 L182,262"/>
+<path d="M182,262 L182,232 L196,232 L196,212 L186,186 L210,158 L234,186 L224,212 L224,232 L238,232 L238,262 L272,262"/>
+<path d="M272,262 L272,244 L260,220 L284,196 L308,220 L296,244 L296,262 L320,262 L320,344"/>
+<path d="M176,344 L176,300 Q210,270 244,300 L244,344"/>
+<path d="M140,290 L140,312 M280,290 L280,312" opacity=".7"/>
+</g>
+<g opacity=".95">
+<path d="M382,344 L382,132 L417,58 L452,132 L452,344"/>
+<circle cx="417" cy="168" r="13" opacity=".8"/>
+<path d="M400,224 L400,268 M417,214 L417,268 M434,224 L434,268" opacity=".7"/>
+<path d="M452,148 L612,148 L648,206 M452,206 L648,206 L648,344"/>
+<path d="M604,148 L612,124 L620,148"/>
+<path d="M488,276 v-30 q8,-14 16,0 v30 M536,276 v-30 q8,-14 16,0 v30 M584,276 v-30 q8,-14 16,0 v30" opacity=".7"/>
+</g>
+<g opacity=".85">
+<path d="M686,344 L694,190 L738,190 L746,344"/>
+<path d="M680,190 L752,190 L746,176 L686,176 Z"/>
+<path d="M696,176 L696,150 L736,150 L736,176 M690,150 L716,118 L742,150"/>
+<path d="M716,224 v16 M716,256 v16 M716,288 v16" opacity=".7"/>
+<path d="M706,344 v-22 q10,-12 20,0 v22"/>
+</g>
+<path d="M60,344 L840,344" opacity=".8"/>
+</g>
+<g stroke="#6fa39b" stroke-width="2" stroke-linecap="round" opacity=".55">
+<path d="M90,374 q22,-10 44,0 q22,10 44,0 q22,-10 44,0"/>
+<path d="M330,392 q22,-10 44,0 q22,10 44,0"/>
+<path d="M560,376 q22,-10 44,0 q22,10 44,0 q22,-10 44,0"/>
+<path d="M200,408 q22,-10 44,0 q22,10 44,0"/>
+<path d="M700,404 q22,-10 44,0"/>
+</g>
+</svg>
 <a class="scroll-hint" href="#map" aria-label="Листать вниз">↓</a>
 </header>
 
