@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Кёнигсберг → Калининград · 800 лет на краю Балтики</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,600;0,700;1,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#141009;
+  --panel:#1e1811;
+  --panel2:#241d14;
+  --line:rgba(226,154,60,.16);
+  --parchment:#ebdfc8;
+  --muted:#a5947a;
+  --amber:#e29a3c;
+  --amber-soft:rgba(226,154,60,.12);
+  --baltic:#6fa39b;
+  --prussian:#4a6fa5;
+  --r:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--ink);
+  color:var(--parchment);
+  font-family:'IBM Plex Sans',system-ui,sans-serif;
+  font-size:16.5px;line-height:1.62;
+  background-image:
+    radial-gradient(1100px 500px at 85% -100px, rgba(226,154,60,.09), transparent 60%),
+    radial-gradient(900px 600px at -200px 30%, rgba(111,163,155,.06), transparent 60%);
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:780px;margin:0 auto;padding:0 18px}
+h1,h2,h3{font-family:'Cormorant',serif;font-weight:700;line-height:1.12;letter-spacing:.01em}
+h2{font-size:clamp(28px,5vw,38px);margin-bottom:8px}
+h3{font-size:22px}
+.kicker{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);margin-bottom:10px}
+.sub{color:var(--muted);max-width:56ch}
+section{padding:52px 0 10px}
+a{color:var(--baltic)}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:50;background:rgba(20,16,9,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;gap:8px;overflow-x:auto;padding:12px 18px;max-width:780px;margin:0 auto;scrollbar-width:none}
+.nav-in::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;font-size:13px;font-weight:500;color:var(--muted);text-decoration:none;padding:7px 13px;border:1px solid var(--line);border-radius:999px;transition:color .2s,border-color .2s}
+.chip:hover{color:var(--amber);border-color:var(--amber)}
+
+/* hero */
+.hero{padding:64px 0 26px;text-align:left}
+.hero h1{font-size:clamp(42px,9vw,74px)}
+.hero .arrow{color:var(--amber);font-style:italic;font-weight:600}
+.hero p{margin-top:14px;color:var(--muted);max-width:58ch}
+.hero .strip{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--baltic)}
+.hero .strip span b{color:var(--parchment);font-weight:500}
+
+/* cards */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+
+/* map */
+.map-scroll{overflow-x:auto;border-radius:var(--r);border:1px solid var(--line);background:var(--panel)}
+.map-scroll svg{display:block;min-width:660px;width:100%;height:auto}
+.map-hint{font-size:12px;color:var(--muted);margin-top:6px;font-family:'IBM Plex Mono',monospace}
+.era-btns{display:flex;gap:8px;overflow-x:auto;padding:14px 0 4px;scrollbar-width:none}
+.era-btns::-webkit-scrollbar{display:none}
+.btn-era{flex:0 0 auto;background:transparent;border:1px solid var(--line);color:var(--muted);font:500 13px 'IBM Plex Sans',sans-serif;padding:9px 14px;border-radius:999px;cursor:pointer;transition:all .25s}
+.btn-era:hover{border-color:var(--amber);color:var(--parchment)}
+.btn-era.active{background:var(--amber);border-color:var(--amber);color:#1a1207;font-weight:600}
+.map-caption{margin-top:12px;font-size:15.5px;color:var(--parchment);min-height:48px}
+.legend{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:12px}
+.lg{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--muted)}
+.sw{width:14px;height:14px;border-radius:4px;border:1px solid rgba(0,0,0,.4)}
+.region{transition:fill .8s ease;stroke:#0d0a06;stroke-width:2}
+.city-lbl{font:500 19px 'IBM Plex Sans',sans-serif;fill:#f2e8d5;paint-order:stroke;stroke:#0d0a06;stroke-width:4px;stroke-linejoin:round}
+.sea-lbl{font:italic 600 24px 'Cormorant',serif;fill:rgba(180,214,208,.5);letter-spacing:.08em}
+#you{opacity:0;transition:opacity .8s}
+#you.show{opacity:1}
+.pulse{animation:pulse 2s infinite}
+@keyframes pulse{0%{r:6}50%{r:10}100%{r:6}}
+
+/* stepper */
+.stepper{margin-top:18px}
+.step-body{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:22px;min-height:170px}
+.step-yr{font-family:'Cormorant',serif;font-weight:700;font-size:40px;color:var(--amber);line-height:1}
+.step-tt{font-weight:600;margin:8px 0 6px;font-size:17px}
+.step-tx{color:var(--muted);font-size:15.5px}
+.step-nav{display:flex;align-items:center;gap:14px;margin-top:14px}
+.step-btn{background:var(--panel2);border:1px solid var(--line);color:var(--parchment);width:44px;height:44px;border-radius:50%;font-size:18px;cursor:pointer;transition:border-color .2s}
+.step-btn:hover{border-color:var(--amber)}
+.step-btn:disabled{opacity:.3;cursor:default}
+.step-dots{display:flex;gap:7px}
+.sdot{width:8px;height:8px;border-radius:50%;background:var(--line)}
+.sdot.on{background:var(--amber)}
+
+/* timeline strip */
+.tl{display:flex;gap:6px;overflow-x:auto;padding:6px 2px 16px;scrollbar-width:none}
+.tl::-webkit-scrollbar{display:none}
+.tl button{flex:0 0 auto;background:transparent;border:none;cursor:pointer;text-align:center;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:12px;padding:6px 8px}
+.tl button::before{content:'';display:block;width:9px;height:9px;border-radius:50%;background:var(--amber);opacity:.45;margin:0 auto 7px;transition:opacity .2s,transform .2s}
+.tl button:hover{color:var(--parchment)}
+.tl button:hover::before{opacity:1;transform:scale(1.3)}
+
+/* era accordions */
+.era{border:1px solid var(--line);border-radius:var(--r);background:var(--panel);margin-bottom:12px;overflow:hidden}
+.era-head{width:100%;display:flex;align-items:baseline;gap:14px;background:none;border:none;color:var(--parchment);text-align:left;padding:18px 20px;cursor:pointer}
+.era-head:hover{background:var(--amber-soft)}
+.era-yrs{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--amber);white-space:nowrap;letter-spacing:.04em}
+.era-head h3{flex:1}
+.era-head .chev{color:var(--muted);transition:transform .3s;font-size:13px}
+.era.open .chev{transform:rotate(180deg)}
+.era-body{display:none;padding:0 20px 20px;border-top:1px solid var(--line)}
+.era.open .era-body{display:block}
+.era-body .lead{padding-top:16px;font-size:16.5px}
+.events{list-style:none;margin-top:14px}
+.events li{display:flex;gap:14px;padding:9px 0;border-bottom:1px dashed rgba(226,154,60,.12);font-size:15px;color:#d8ccb6}
+.events li:last-child{border-bottom:none}
+.yr{flex:0 0 84px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--baltic);padding-top:2px}
+.fact{margin-top:14px;background:var(--amber-soft);border-left:3px solid var(--amber);border-radius:0 10px 10px 0;padding:12px 15px;font-size:14.5px}
+.fact b{color:var(--amber);font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:11px;letter-spacing:.18em;text-transform:uppercase;display:block;margin-bottom:4px}
+
+/* powers */
+.powers{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+.power{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.power h3{color:var(--amber);margin-bottom:6px}
+.power p{font-size:14.5px;color:#d8ccb6}
+@media(max-width:560px){.powers{grid-template-columns:1fr}}
+
+/* bridges */
+.bridge-card svg{display:block;width:100%;height:auto;border-radius:10px}
+.land{fill:#3a3226;cursor:pointer;transition:fill .2s}
+.land:hover{fill:#4a3f2c}
+.land.cur{fill:#5c4c2e;stroke:var(--amber);stroke-width:3}
+.bridge{fill:#c08a4a;cursor:pointer;transition:opacity .3s,fill .2s;stroke:#0d0a06;stroke-width:1.5}
+.bridge:hover{fill:var(--amber)}
+.bridge.used{opacity:.22;cursor:default}
+.b-lbl{font:500 15px 'IBM Plex Sans',sans-serif;fill:#cbbfa6;pointer-events:none}
+.status{margin-top:12px;font-size:15px;min-height:44px}
+.status b{color:var(--amber)}
+.reset{margin-top:8px;background:transparent;border:1px solid var(--line);color:var(--parchment);padding:9px 16px;border-radius:999px;font:500 13.5px 'IBM Plex Sans',sans-serif;cursor:pointer}
+.reset:hover{border-color:var(--amber)}
+
+/* route */
+.route{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+.place{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.place .de{font-family:'Cormorant',serif;font-style:italic;font-size:16px;color:var(--baltic)}
+.place h3{margin-bottom:2px}
+.place p{font-size:14.5px;color:#d8ccb6;margin-top:8px}
+.place.here{border-color:var(--amber);box-shadow:0 0 0 1px var(--amber) inset}
+.tag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#1a1207;background:var(--amber);border-radius:5px;padding:3px 8px;margin-bottom:10px}
+@media(max-width:560px){.route{grid-template-columns:1fr}}
+
+/* today */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px 14px;text-align:center}
+.stat .n{font-family:'Cormorant',serif;font-weight:700;font-size:34px;color:var(--amber);line-height:1.1}
+.stat .l{font-size:12px;color:var(--muted);margin-top:5px}
+@media(max-width:640px){.stats{grid-template-columns:1fr 1fr}}
+.today-tx{color:#d8ccb6;font-size:15.5px;max-width:66ch}
+
+/* quiz */
+.q{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-bottom:12px}
+.q .qq{font-weight:600;margin-bottom:12px}
+.opts{display:grid;gap:8px}
+.opt{background:var(--panel2);border:1px solid var(--line);color:var(--parchment);text-align:left;padding:11px 14px;border-radius:10px;font:400 14.5px 'IBM Plex Sans',sans-serif;cursor:pointer;transition:border-color .2s}
+.opt:hover{border-color:var(--amber)}
+.opt.right{border-color:#7c9a5c;background:rgba(124,154,92,.16)}
+.opt.wrong{border-color:#a84b3f;background:rgba(168,75,63,.14);opacity:.8}
+.opt:disabled{cursor:default}
+.qnote{display:none;margin-top:10px;font-size:13.5px;color:var(--muted)}
+.q.done .qnote{display:block}
+.score{font-family:'Cormorant',serif;font-size:26px;font-weight:700;color:var(--amber);margin-top:6px;min-height:34px}
+
+.foot{padding:44px 0 60px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);margin-top:56px}
+:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+<a class="chip" href="#map">Карта эпох</a>
+<a class="chip" href="#why">Почему эксклав</a>
+<a class="chip" href="#eras">История</a>
+<a class="chip" href="#powers">Четыре силы</a>
+<a class="chip" href="#bridges">Мосты Эйлера</a>
+<a class="chip" href="#route">Ваш маршрут</a>
+<a class="chip" href="#today">Сегодня</a>
+<a class="chip" href="#quiz">Квиз</a>
+</div></nav>
+
+<header class="hero wrap">
+<div class="kicker">Восточная Пруссия · Калининградская область</div>
+<h1>Кёнигсберг <span class="arrow">→</span> Калининград</h1>
+<p>Земля, где балтский народ дал имя немецкому королевству, немецкое королевство собрало Германию, а потом всё это стало самым западным кусочком России. Восемь эпох, одна карта, семь мостов — разберёмся.</p>
+<div class="strip">
+<span><b>1255</b> — основан город</span>
+<span><b>4</b> государства сменились</span>
+<span><b>1946</b> — смена имени</span>
+<span><b>1991</b> — стал эксклавом</span>
+</div>
+</header>
+
+<section id="map" class="wrap">
+<div class="kicker">Сигнатура места</div>
+<h2>Одна земля, шесть эпох</h2>
+<p class="sub">Нажимайте на годы — карта перекрашивается. Границы схематичны: важно не где линия, а чья земля.</p>
+<div class="era-btns" id="eraBtns"></div>
+<div class="map-scroll">
+<svg viewBox="0 0 840 560" role="img" aria-label="Схематическая карта юго-восточной Балтики по эпохам">
+<defs>
+<linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#12262c"/><stop offset="1" stop-color="#1a3138"/>
+</linearGradient>
+</defs>
+<rect x="0" y="0" width="840" height="560" fill="url(#sea)"/>
+<text class="sea-lbl" x="330" y="120">Балтийское море</text>
+<path id="r-pl" class="region" d="M302,392 Q450,404 578,368 L628,410 L800,412 L800,560 L302,560 Z"/>
+<path id="r-de" class="region" d="M40,318 Q140,296 220,300 Q268,302 302,292 L302,560 L40,560 Z"/>
+<path id="r-lt" class="region" d="M578,334 L600,312 L640,230 Q696,212 748,224 L800,244 L800,410 Q708,404 628,408 L578,362 Z"/>
+<path id="r-cor" class="region" d="M302,292 Q320,286 336,290 L340,392 L302,392 Z"/>
+<path id="r-epn" class="region" d="M356,306 Q366,270 402,258 Q428,230 454,250 Q504,258 548,262 Q574,266 578,300 L578,334 L356,334 Z"/>
+<path id="r-eps" class="region" d="M356,334 L578,334 L578,362 Q574,398 540,404 L392,410 Q360,406 356,382 Z"/>
+<path id="r-mem" class="region" d="M578,300 L578,268 Q596,238 616,222 L640,230 Q622,258 610,286 L600,312 Z"/>
+<path id="r-dz" class="region" d="M336,290 Q352,278 366,286 L368,308 L344,310 Z"/>
+<path id="r-bb" class="region" d="M120,352 Q180,344 244,350 L244,470 Q180,478 120,470 Z" stroke-opacity="0.25"/>
+<path d="M446,254 Q500,232 570,220" fill="none" stroke="#7d6c4d" stroke-width="4" stroke-linecap="round"/>
+<path d="M362,300 Q392,286 420,282" fill="none" stroke="#7d6c4d" stroke-width="3" stroke-linecap="round"/>
+<g><circle cx="150" cy="392" r="4.5" fill="#f2e8d5" stroke="#0d0a06" stroke-width="1.5"/><text class="city-lbl" x="138" y="418">Берлин</text></g>
+<g><circle cx="352" cy="296" r="4.5" fill="#f2e8d5" stroke="#0d0a06" stroke-width="1.5"/><text class="city-lbl" x="286" y="330" id="lbl-dz">Гданьск</text></g>
+<g><circle cx="690" cy="330" r="4.5" fill="#f2e8d5" stroke="#0d0a06" stroke-width="1.5"/><text class="city-lbl" x="652" y="356">Вильнюс</text></g>
+<g><circle cx="470" cy="472" r="4.5" fill="#f2e8d5" stroke="#0d0a06" stroke-width="1.5"/><text class="city-lbl" x="428" y="498">Варшава</text></g>
+<g><circle cx="600" cy="256" r="4.5" fill="#f2e8d5" stroke="#0d0a06" stroke-width="1.5"/><text class="city-lbl" x="608" y="248" id="lbl-mem">Мемель</text></g>
+<g><path d="M462,290 l3.8,7.7 8.5,1.2 -6.1,6 1.4,8.4 -7.6,-4 -7.6,4 1.4,-8.4 -6.1,-6 8.5,-1.2 Z" fill="#f6d78f" stroke="#0d0a06" stroke-width="1.5"/><text class="city-lbl" x="400" y="330" id="lbl-kng">Кёнигсберг</text></g>
+<g id="you"><circle class="pulse" cx="452" cy="282" r="6" fill="#e29a3c" stroke="#0d0a06" stroke-width="2"/><text class="city-lbl" x="352" y="272" fill="#e29a3c">вы здесь</text></g>
+</svg>
+</div>
+<div class="map-hint">↔ карту можно двигать пальцем</div>
+<p class="map-caption" id="mapCap"></p>
+<div class="legend" id="mapLeg"></div>
+</section>
+
+<section id="why" class="wrap">
+<div class="kicker">Главный вопрос</div>
+<h2>Как область стала эксклавом</h2>
+<p class="sub">Шесть шагов от Версаля до сегодняшнего дня. Листайте стрелками.</p>
+<div class="stepper">
+<div class="step-body">
+<div class="step-yr" id="stYr"></div>
+<div class="step-tt" id="stTt"></div>
+<div class="step-tx" id="stTx"></div>
+</div>
+<div class="step-nav">
+<button class="step-btn" id="stPrev" aria-label="Назад">←</button>
+<div class="step-dots" id="stDots"></div>
+<button class="step-btn" id="stNext" aria-label="Вперёд">→</button>
+</div>
+</div>
+</section>
+<section id="eras" class="wrap">
+<div class="kicker">Хронология</div>
+<h2>Восемь эпох одной земли</h2>
+<p class="sub">Точки — быстрые переходы. Карточки раскрываются по нажатию.</p>
+<div class="tl" id="tlStrip"></div>
+
+<div class="era open" id="era1">
+<button class="era-head"><span class="era-yrs">до 1230-х</span><h3>Пруссы: народ, отдавший имя</h3><span class="chev">▼</span></button>
+<div class="era-body">
+<p class="lead">Между Вислой и Неманом тысячу лет жили пруссы — балтские племена, родня литовцев и латышей. Не германцы и не славяне: язычники со священными рощами и культом коня.</p>
+<ul class="events">
+<li><span class="yr">ок. I в.</span><span>Римские купцы приходят сюда за янтарём — «золото Балтики» уходит по Янтарному пути в Средиземноморье.</span></li>
+<li><span class="yr">997</span><span>Миссионер Адальберт Пражский пытается крестить пруссов и погибает. Станет святым покровителем Польши.</span></li>
+<li><span class="yr">XI–XIII вв.</span><span>Пруссы отбивают походы польских князей и упорно остаются язычниками.</span></li>
+</ul>
+<div class="fact"><b>Парадокс</b>Народ исчезнет к XVIII веку (последние носители прусского языка умолкли около 1700 года), а его имя станет именем самого «немецкого» из королевств.</div>
+</div>
+</div>
+
+<div class="era" id="era2">
+<button class="era-head"><span class="era-yrs">1230–1525</span><h3>Тевтонский орден</h3><span class="chev">▼</span></button>
+<div class="era-body">
+<p class="lead">Немецкие рыцари-монахи, приглашённые крестить пруссов, за полвека покоряют их — и строят на этой земле собственное государство.</p>
+<ul class="events">
+<li><span class="yr">1226</span><span>Польский князь Конрад Мазовецкий зовёт орден против пруссов; император жалует рыцарям все будущие завоевания.</span></li>
+<li><span class="yr">1255</span><span>Над рекой Прегель заложен замок Кёнигсберг — «Королевская гора», в честь союзника похода, чешского короля Оттокара II.</span></li>
+<li><span class="yr">1333</span><span>На острове начинают строить Кафедральный собор — тот самый, что стоит и сейчас.</span></li>
+<li><span class="yr">1410</span><span>Грюнвальд: Польша и Литва громят орденское войско. Расцвет закончился.</span></li>
+<li><span class="yr">1457</span><span>Потеряв столицу Мариенбург, великий магистр переезжает в Кёнигсберг; орден — вассал Польши.</span></li>
+</ul>
+<div class="fact"><b>Деталь</b>Кёнигсберг назван в честь короля Чехии. Собственный король появится у Пруссии только через 446 лет.</div>
+</div>
+</div>
+
+<div class="era" id="era3">
+<button class="era-head"><span class="era-yrs">1525–1701</span><h3>Герцогство: первый протестантский эксперимент</h3><span class="chev">▼</span></button>
+<div class="era-body">
+<p class="lead">Последний магистр Альбрехт по совету Лютера снимает орденский плащ — и превращает монашеское государство в светское герцогство.</p>
+<ul class="events">
+<li><span class="yr">1525</span><span>Секуляризация: герцогство Пруссия — первое в мире государство, где лютеранство стало официальной религией. Пока — вассал польского короля.</span></li>
+<li><span class="yr">1544</span><span>Альбрехт основывает университет Альбертина. Кёнигсберг — интеллектуальный центр всего региона.</span></li>
+<li><span class="yr">1547</span><span>Здесь печатают первую в истории книгу на литовском языке — катехизис Мажвидаса.</span></li>
+<li><span class="yr">1618</span><span>Герцогство наследуют курфюрсты Бранденбурга, Гогенцоллерны. Начинается «Бранденбург-Пруссия».</span></li>
+<li><span class="yr">1657</span><span>Велауский договор: Пруссия выходит из-под польского сюзеренитета. Руки развязаны.</span></li>
+</ul>
+<div class="fact"><b>Смысл</b>Пруссия лежала вне Священной Римской империи — именно эта «внешность» скоро позволит Гогенцоллернам стать королями.</div>
+</div>
+</div>
+
+<div class="era" id="era4">
+<button class="era-head"><span class="era-yrs">1701–1871</span><h3>Королевство: взлёт</h3><span class="chev">▼</span></button>
+<div class="era-body">
+<p class="lead">18 января 1701 года курфюрст Фридрих сам возлагает на себя корону — здесь, в Кёнигсберге.</p>
+<ul class="events">
+<li><span class="yr">1701</span><span>Титул звучит «король в Пруссии»: короноваться «в Бранденбурге» нельзя — тот внутри империи, где король уже есть. Пруссия — снаружи. Так провинция дала имя всему государству.</span></li>
+<li><span class="yr">1724</span><span>В семье шорника рождается Иммануил Кант. Он проживёт в городе все свои 79 лет.</span></li>
+<li><span class="yr">1736</span><span>Эйлер решает задачу о семи кёнигсбергских мостах — рождается теория графов. Сыграете ниже.</span></li>
+<li><span class="yr">1758–62</span><span>Семилетняя война: Восточная Пруссия — провинция Российской империи. Жители, включая Канта, присягают Елизавете. Пётр III возвращает всё Фридриху II.</span></li>
+<li><span class="yr">1772</span><span>Первый раздел Польши: Пруссия забирает «коридор», её земли впервые соединяются в одно целое.</span></li>
+<li><span class="yr">1807</span><span>Наполеон: разбитый прусский двор бежит в Кёнигсберг. Мир подписывают на плоту посреди Немана в Тильзите. Тильзит — нынешний Советск, Прейсиш-Эйлау — Багратионовск, Фридланд — Правдинск.</span></li>
+<li><span class="yr">1813</span><span>Именно отсюда Пруссия разворачивается против Наполеона — уже в союзе с Россией.</span></li>
+</ul>
+<div class="fact"><b>Любимое местное</b>Четыре года Кант формально был подданным Российской империи.</div>
+</div>
+</div>
+
+<div class="era" id="era5">
+<button class="era-head"><span class="era-yrs">1871–1918</span><h3>Внутри Германской империи</h3><span class="chev">▼</span></button>
+<div class="era-body">
+<p class="lead">Пруссия побеждает Австрию, затем Францию — и собирает вокруг себя Германию. Кёнигсберг — процветающий восточный форпост.</p>
+<ul class="events">
+<li><span class="yr">1866</span><span>Кёниггрец: Австрия выбита из германского проекта. Объединение пойдёт «по-прусски».</span></li>
+<li><span class="yr">1871</span><span>Германскую империю провозглашают в Версале, в сердце побеждённой Франции. Прусский король становится кайзером.</span></li>
+<li><span class="yr">~1900</span><span>Порт, кольцо фортов, марципан, янтарь: город богат и уверен в себе.</span></li>
+<li><span class="yr">1914</span><span>Русская армия входит в Восточную Пруссию: успех при Гумбиннене, катастрофа армии Самсонова при Танненберге.</span></li>
+</ul>
+<div class="fact"><b>Штрих</b>Восточная Пруссия — единственная часть Германии, по которой Первая мировая прошла на её собственной земле.</div>
+</div>
+</div>
+
+<div class="era" id="era6">
+<button class="era-head"><span class="era-yrs">1919–1945</span><h3>Отрезание и катастрофа</h3><span class="chev">▼</span></button>
+<div class="era-body">
+<p class="lead">Версальский мир перекраивает карту — и Восточная Пруссия впервые становится островом.</p>
+<ul class="events">
+<li><span class="yr">1919</span><span>Польский коридор и вольный город Данциг: провинция отрезана от Германии. «Коридор» станет формальным поводом ко Второй мировой.</span></li>
+<li><span class="yr">1933</span><span>К власти приходят нацисты; гауляйтер Эрих Кох правит провинцией как личной вотчиной.</span></li>
+<li><span class="yr">авг. 1944</span><span>Британские бомбардировки выжигают средневековый центр Кёнигсберга.</span></li>
+<li><span class="yr">1945</span><span>Восточно-Прусская операция; сотни тысяч жителей бегут на запад, в том числе по льду залива.</span></li>
+<li><span class="yr">6–9 апр.</span><span>Штурм города: гарнизон генерала Ляша капитулирует за четыре дня.</span></li>
+</ul>
+<div class="fact"><b>Тайна</b>Янтарная комната, вывезенная из Царского Села, последний раз видена в Королевском замке. С 1945 года — главная нераскрытая загадка города.</div>
+</div>
+</div>
+
+<div class="era" id="era7">
+<button class="era-head"><span class="era-yrs">1945–1991</span><h3>Советский Калининград</h3><span class="chev">▼</span></button>
+<div class="era-body">
+<p class="lead">Потсдам делит провинцию, а 1946 год меняет здесь всё: имена, людей, язык.</p>
+<ul class="events">
+<li><span class="yr">1945</span><span>Потсдамская конференция: север с Кёнигсбергом — СССР, юг — Польше, Мемель — Литовской ССР.</span></li>
+<li><span class="yr">1946</span><span>Область включают в РСФСР; 4 июля Кёнигсберг становится Калининградом — в честь только что умершего «всесоюзного старосты», который здесь ни разу не был. Следом переименовывают всё: Кранц → Зеленоградск, Раушен → Светлогорск, Тильзит → Советск.</span></li>
+<li><span class="yr">1947–51</span><span>Оставшихся немцев (около 100 тысяч) депортируют в Германию; область заселяют переселенцы из России, Белоруссии, Украины.</span></li>
+<li><span class="yr">1947</span><span>Союзники законом №46 упраздняют Пруссию как государство. Слово исчезает с карт.</span></li>
+<li><span class="yr">до 1991</span><span>Регион закрыт для иностранцев: база Балтфлота в Балтийске, рыбацкий флот, янтарный комбинат.</span></li>
+<li><span class="yr">1967–69</span><span>Руины Королевского замка взрывают; на его месте начинают Дом Советов — и не достраивают.</span></li>
+</ul>
+<div class="fact"><b>Редкий случай</b>За несколько лет здесь полностью сменилось население. В Европе почти нет мест, где у земли «перезагрузили» одновременно и людей, и все имена.</div>
+</div>
+</div>
+
+<div class="era" id="era8">
+<button class="era-head"><span class="era-yrs">1991 — сейчас</span><h3>Эксклав</h3><span class="chev">▼</span></button>
+<div class="era-body">
+<p class="lead">СССР распадается — и условная линия с Литвой в одну ночь становится государственной границей.</p>
+<ul class="events">
+<li><span class="yr">1991</span><span>Область отрезана от остальной России. Строго говоря, это полуэксклав: есть собственный выход к морю.</span></li>
+<li><span class="yr">1996</span><span>Особая экономическая зона — льготы для производства и сборки.</span></li>
+<li><span class="yr">2004</span><span>Польша и Литва вступают в ЕС и НАТО; наземный транзит — по упрощённому транзитному документу через Литву.</span></li>
+<li><span class="yr">2005</span><span>750-летие города; восстановленный Кафедральный собор и могила Канта — снова его сердце.</span></li>
+<li><span class="yr">2018</span><span>Матчи чемпионата мира по футболу на новом стадионе.</span></li>
+<li><span class="yr">2022</span><span>Сухопутный транзит части грузов ограничен; растут паромные линии Усть-Луга — Балтийск и авиасообщение.</span></li>
+<li><span class="yr">2023–24</span><span>Недостроенный Дом Советов разбирают. 2024-й — 300-летие Канта.</span></li>
+</ul>
+<div class="fact"><b>Итог</b>Единственный регион России, откуда до любой другой её точки не доехать, не пересекая чужих границ.</div>
+</div>
+</div>
+</section>
+
+<section id="powers" class="wrap">
+<div class="kicker">Ваш вопрос</div>
+<h2>Пруссия и четыре силы</h2>
+<p class="sub">Почему в этой истории всё время мелькают Австрия, Франция, Россия — и куда делась сама Пруссия.</p>
+<div class="powers">
+<div class="power"><h3>Австрия</h3><p>Главный соперник. Двести лет Габсбурги считались «первыми среди немцев», пока Фридрих II не отнял у них Силезию, а Бисмарк в 1866-м не выбил Австрию из германского проекта. Германия объединилась «по-прусски» — без Вены.</p></div>
+<div class="power"><h3>Франция</h3><p>Качели реваншей. 1806-й: Наполеон растоптал Пруссию за неделю. 1871-й: пруссаки провозгласили свою империю в Версале. Эти качели остановятся только в 1945-м.</p></div>
+<div class="power"><h3>Россия</h3><p>Сосед-маятник: враг в Семилетнюю войну — и четыре года владелец этих земель; союзник против Наполеона; противник в мировых войнах — и в итоге наследник северной трети провинции.</p></div>
+<div class="power"><h3>Германия</h3><p>Парадокс финала: Пруссия создала Германию — и растворилась в ней. А в 1947-м победители официально упразднили само слово «Пруссия». Осталась земля. Вы сейчас на ней стоите.</p></div>
+</div>
+</section>
+<section id="bridges" class="wrap">
+<div class="kicker">Интерактив · 1736</div>
+<h2>Семь мостов Кёнигсберга</h2>
+<p class="sub">Горожане спорили: можно ли пройти по всем семи мостам, не ступив ни на один дважды? Эйлер ответил математикой — и заодно придумал теорию графов. Проверьте себя: нажмите берег, с которого начнёте, и идите по мостам.</p>
+<div class="card bridge-card" style="margin-top:18px">
+<svg viewBox="0 0 360 240" role="img" aria-label="Схема семи мостов Кёнигсберга">
+<rect x="0" y="0" width="360" height="240" fill="#12262c" rx="10"/>
+<rect id="nA" class="land" data-node="A" x="0" y="0" width="360" height="70" rx="10"/>
+<rect id="nB" class="land" data-node="B" x="0" y="170" width="360" height="70" rx="10"/>
+<ellipse id="nC" class="land" data-node="C" cx="100" cy="120" rx="52" ry="32"/>
+<ellipse id="nD" class="land" data-node="D" cx="252" cy="120" rx="58" ry="30"/>
+<rect class="bridge" data-b="0" x="62"  y="66"  width="15" height="26" rx="3"/>
+<rect class="bridge" data-b="1" x="116" y="66"  width="15" height="26" rx="3"/>
+<rect class="bridge" data-b="2" x="62"  y="148" width="15" height="26" rx="3"/>
+<rect class="bridge" data-b="3" x="116" y="148" width="15" height="26" rx="3"/>
+<rect class="bridge" data-b="4" x="244" y="66"  width="15" height="28" rx="3"/>
+<rect class="bridge" data-b="5" x="244" y="146" width="15" height="28" rx="3"/>
+<rect class="bridge" data-b="6" x="152" y="113" width="42" height="14" rx="3"/>
+<text class="b-lbl" x="14" y="26">Северный берег</text>
+<text class="b-lbl" x="14" y="226">Южный берег</text>
+<text class="b-lbl" x="66" y="125" font-size="13">Кнайпхоф</text>
+<text class="b-lbl" x="226" y="125" font-size="13">Ломзе</text>
+</svg>
+<p class="status" id="brStatus">Выберите берег или остров, с которого начнёте путь.</p>
+<button class="reset" id="brReset">Начать заново</button>
+</div>
+</section>
+
+<section id="route" class="wrap">
+<div class="kicker">Прикладное</div>
+<h2>Ваш маршрут — на языке 1945 года</h2>
+<p class="sub">Каждое место здесь прожило две жизни. Немецкое имя — курсивом.</p>
+<div class="route">
+<div class="place here"><span class="tag">вы здесь</span><h3>Орловка</h3><div class="de">Nesselbeck · «Крапивный ручей»</div><p>Дворянское имение XVIII века семьи Нойманн-Фельдберг из Мекленбурга — почти 500 гектаров по обе стороны ручья. От фольварка уцелел главный дом: его отреставрировали в 2000-х — это и есть ваш отель «Усадьба». Соседний «замок Нессельбек» — новодел по мотивам.</p></div>
+<div class="place"><h3>Зеленоградск</h3><div class="de">Cranz</div><p>Королевский морской курорт с 1816 года, главная здравница Восточной Пруссии. Сегодня — променад, довоенные виллы и неофициальная столица котов.</p></div>
+<div class="place"><h3>Светлогорск</h3><div class="de">Rauschen</div><p>Курорт в соснах на высоких дюнах; водонапорная башня 1908 года — символ города. Прусская курортная архитектура уцелела здесь лучше, чем где-либо в области.</p></div>
+<div class="place"><h3>Куршская коса</h3><div class="de">Kurische Nehrung</div><p>98 километров песчаной стрелы между морем и заливом, объект ЮНЕСКО. Странствующие дюны, «танцующий лес», старейшая орнитологическая станция. Немцы звали косу «прусской Сахарой».</p></div>
+</div>
+</section>
+
+<section id="today" class="wrap">
+<div class="kicker">Состояние дел</div>
+<h2>Сегодня</h2>
+<div class="stats">
+<div class="stat"><div class="n">1255</div><div class="l">год основания города</div></div>
+<div class="stat"><div class="n">~1 млн</div><div class="l">жителей области</div></div>
+<div class="stat"><div class="n">90%</div><div class="l">мировых запасов янтаря — в Янтарном</div></div>
+<div class="stat"><div class="n">2</div><div class="l">границы до «большой» России посуху</div></div>
+</div>
+<p class="today-tx">Область живёт как остров: своя энергетика, свои паромы на Усть-Лугу, аэропорт Храброво как главная пуповина. Экономика — сборочные производства особой зоны, порт и рыба, янтарь, IT и стремительно выросший внутренний туризм: после 2020-го сюда поехала вся страна, и набережные Зеленоградска летом напоминают Сочи. При этом ощущение «немного Европы», которое вы поймали в центрах городов, — не иллюзия: брусчатка, черепица, форты и кирхи здесь старше самой области на столетия, и местные научились этим наследием дорожить — его реставрируют, обживают и превращают в идентичность, которой больше нет ни у одного российского региона.</p>
+</section>
+
+<section id="quiz" class="wrap">
+<div class="kicker">Проверка</div>
+<h2>Шесть вопросов на янтарь</h2>
+<div id="quizBox" style="margin-top:18px"></div>
+<div class="score" id="scoreLine"></div>
+</section>
+
+<footer class="foot wrap">Карты схематичны, границы упрощены — важна логика, а не геодезия. Собрано для поездки по бывшей Восточной Пруссии · июль 2026.</footer>
+<script>
+(function(){
+/* ---------- MAP ---------- */
+var C={orden:'#d9cba8',hre:'#6b5f4b',pru:'#4a6fa5',pol:'#a9705b',rus:'#a84b3f',lit:'#7c9a5c',free:'#d2a75a',neu:'#4a463c',ger:'#5e718a',amber:'#e29a3c'};
+var ERAS=[
+{k:'1400',btn:'~1400 · Орден',f:{de:C.hre,bb:C.hre,cor:C.orden,dz:C.orden,epn:C.orden,eps:C.orden,mem:C.orden,lt:C.pol,pl:C.pol},
+ lg:[[C.orden,'Тевтонский орден'],[C.pol,'Польша и Литва'],[C.hre,'Свящ. Римская империя']],
+ cap:'Государство рыцарей-монахов на земле покорённых пруссов. Кёнигсбергу — полтора века.',dz:'Данциг',mem:'Мемель'},
+{k:'1701',btn:'1701 · Королевство',f:{de:C.hre,bb:C.pru,cor:C.pol,dz:C.pol,epn:C.pru,eps:C.pru,mem:C.pru,lt:C.pol,pl:C.pol},
+ lg:[[C.pru,'Королевство Пруссия'],[C.pol,'Речь Посполитая'],[C.hre,'Свящ. Римская империя']],
+ cap:'Королевство из двух кусков: Бранденбург и Пруссия, между ними — польские земли. Соединятся в 1772-м.',dz:'Данциг',mem:'Мемель'},
+{k:'1871',btn:'1871 · Империя',f:{de:C.ger,bb:C.ger,cor:C.ger,dz:C.ger,epn:C.ger,eps:C.ger,mem:C.ger,lt:C.rus,pl:C.rus},
+ lg:[[C.ger,'Германская империя'],[C.rus,'Российская империя']],
+ cap:'Пруссия объединила Германию — и растворилась в ней. Две империи теперь граничат напрямую.',dz:'Данциг',mem:'Мемель'},
+{k:'1920',btn:'1920 · Версаль',f:{de:C.ger,bb:C.ger,cor:C.pol,dz:C.free,epn:C.ger,eps:C.ger,mem:C.lit,lt:C.lit,pl:C.pol},
+ lg:[[C.ger,'Германия'],[C.pol,'Польша (коридор)'],[C.free,'Данциг — вольный город'],[C.lit,'Литва']],
+ cap:'Польский коридор отрезал Восточную Пруссию. Первый раз эксклав — пока немецкий.',dz:'Данциг',mem:'Мемель'},
+{k:'1945',btn:'1945 · Раздел',f:{de:C.neu,bb:C.neu,cor:C.pol,dz:C.pol,epn:C.rus,eps:C.pol,mem:C.rus,lt:C.rus,pl:C.pol},
+ lg:[[C.rus,'СССР'],[C.pol,'Польша'],[C.neu,'Германия (зоны оккупации)']],
+ cap:'Потсдам: север — СССР, юг — Польше, Мемель — Литовской ССР. Кёнигсберг становится Калининградом.',dz:'Гданьск',mem:'Клайпеда'},
+{k:'now',btn:'2026 · Сегодня',f:{de:C.neu,bb:C.neu,cor:C.pol,dz:C.pol,epn:C.amber,eps:C.pol,mem:C.lit,lt:C.lit,pl:C.pol},
+ lg:[[C.amber,'Калининградская обл. (Россия)'],[C.pol,'Польша (ЕС, НАТО)'],[C.lit,'Литва (ЕС, НАТО)'],[C.neu,'Германия']],
+ cap:'Полуэксклав: посуху до остальной России — две границы, зато свои море и небо. Звезда — Калининград, точка — вы.',dz:'Гданьск',mem:'Клайпеда'}
+];
+var btnBox=document.getElementById('eraBtns'),cap=document.getElementById('mapCap'),leg=document.getElementById('mapLeg');
+function applyEra(i){
+  var e=ERAS[i];
+  Object.keys(e.f).forEach(function(id){var el=document.getElementById('r-'+id);if(el)el.style.fill=e.f[id];});
+  cap.textContent=e.cap;
+  leg.innerHTML=e.lg.map(function(p){return '<span class="lg"><span class="sw" style="background:'+p[0]+'"></span>'+p[1]+'</span>';}).join('');
+  document.getElementById('lbl-dz').textContent=e.dz;
+  document.getElementById('lbl-mem').textContent=e.mem;
+  document.getElementById('lbl-kng').textContent=(e.k==='1945'||e.k==='now')?'Калининград':'Кёнигсберг';
+  document.getElementById('you').classList.toggle('show',e.k==='now');
+  Array.prototype.forEach.call(btnBox.children,function(b,j){b.classList.toggle('active',j===i);});
+}
+ERAS.forEach(function(e,i){
+  var b=document.createElement('button');b.className='btn-era';b.textContent=e.btn;
+  b.addEventListener('click',function(){applyEra(i);});btnBox.appendChild(b);
+});
+applyEra(5);
+
+/* ---------- STEPPER ---------- */
+var STEPS=[
+{y:'1919',t:'Версаль создаёт прецедент',x:'Польше дают коридор к морю — он режет Германию надвое. Восточная Пруссия уже эксклав, пока немецкий.'},
+{y:'1945',t:'Потсдам делит провинцию',x:'Север с Кёнигсбергом отходит СССР, юг — Польше, Мемель — Литовской ССР.'},
+{y:'1946',t:'Область — в РСФСР',x:'Хотя рядом Литовская ССР, регион включают именно в Россию. Внутри СССР эта граница — формальность на карте.'},
+{y:'1991',t:'Формальность становится границей',x:'СССР распадается. Литва и Белоруссия — заграница, и область в одну ночь оказывается отрезанной.'},
+{y:'2004',t:'Соседи уходят в ЕС и НАТО',x:'Наземный путь в Россию — только по упрощённому транзитному документу через Литву.'},
+{y:'2020-е',t:'Остров окончательно',x:'После 2022-го сухопутный транзит части грузов ограничен; главные артерии — паромы Усть-Луга—Балтийск и небо.'}
+];
+var si=0,stYr=document.getElementById('stYr'),stTt=document.getElementById('stTt'),stTx=document.getElementById('stTx'),
+    stPrev=document.getElementById('stPrev'),stNext=document.getElementById('stNext'),stDots=document.getElementById('stDots');
+STEPS.forEach(function(){var d=document.createElement('span');d.className='sdot';stDots.appendChild(d);});
+function drawStep(){
+  stYr.textContent=STEPS[si].y;stTt.textContent=STEPS[si].t;stTx.textContent=STEPS[si].x;
+  stPrev.disabled=si===0;stNext.disabled=si===STEPS.length-1;
+  Array.prototype.forEach.call(stDots.children,function(d,j){d.classList.toggle('on',j<=si);});
+}
+stPrev.addEventListener('click',function(){if(si>0){si--;drawStep();}});
+stNext.addEventListener('click',function(){if(si<STEPS.length-1){si++;drawStep();}});
+drawStep();
+
+/* ---------- TIMELINE + ACCORDIONS ---------- */
+var TL=[['I в.','era1'],['1255','era2'],['1410','era2'],['1525','era3'],['1701','era4'],['1758','era4'],['1807','era4'],['1871','era5'],['1914','era5'],['1919','era6'],['1945','era6'],['1946','era7'],['1991','era8'],['2018','era8'],['2026','era8']];
+var strip=document.getElementById('tlStrip');
+TL.forEach(function(p){
+  var b=document.createElement('button');b.textContent=p[0];
+  b.addEventListener('click',function(){
+    var era=document.getElementById(p[1]);era.classList.add('open');
+    era.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+  strip.appendChild(b);
+});
+Array.prototype.forEach.call(document.querySelectorAll('.era-head'),function(h){
+  h.addEventListener('click',function(){h.parentElement.classList.toggle('open');});
+});
+
+/* ---------- BRIDGES ---------- */
+var BR=[['A','C'],['A','C'],['B','C'],['B','C'],['A','D'],['B','D'],['C','D']];
+var NAMES={A:'северном берегу',B:'южном берегу',C:'острове Кнайпхоф',D:'острове Ломзе'};
+var used={},cur=null,st=document.getElementById('brStatus');
+function usedCount(){return Object.keys(used).length;}
+function hasMove(n){for(var i=0;i<7;i++){if(!used[i]&&(BR[i][0]===n||BR[i][1]===n))return true;}return false;}
+function setCur(n){
+  cur=n;
+  Array.prototype.forEach.call(document.querySelectorAll('.land'),function(l){l.classList.toggle('cur',l.dataset.node===n);});
+}
+Array.prototype.forEach.call(document.querySelectorAll('.land'),function(l){
+  l.addEventListener('click',function(){
+    if(cur===null){setCur(l.dataset.node);st.innerHTML='Вы на <b>'+NAMES[cur]+'</b>. Идите по любому примыкающему мосту.';}
+  });
+});
+Array.prototype.forEach.call(document.querySelectorAll('.bridge'),function(b){
+  b.addEventListener('click',function(){
+    var i=+b.dataset.b;
+    if(cur===null){st.textContent='Сначала выберите берег или остров — нажмите на сушу.';return;}
+    if(used[i])return;
+    var u=BR[i][0],v=BR[i][1];
+    if(cur!==u&&cur!==v){st.textContent='Этот мост не примыкает к месту, где вы стоите.';return;}
+    used[i]=true;b.classList.add('used');
+    setCur(cur===u?v:u);
+    var n=usedCount();
+    if(n===7){st.innerHTML='<b>7 из 7?!</b> Вы сломали математику — так не бывает. Начните заново и проверьте.';return;}
+    if(!hasMove(cur)){st.innerHTML='<b>Тупик: '+n+' из 7.</b> И так будет всегда: ко всем четырём берегам ведёт нечётное число мостов, поэтому маршрута не существует. Эйлер доказал это в 1736 году.';return;}
+    st.innerHTML='Пройдено <b>'+n+' из 7</b>. Вы на '+NAMES[cur]+'.';
+  });
+});
+document.getElementById('brReset').addEventListener('click',function(){
+  used={};cur=null;
+  Array.prototype.forEach.call(document.querySelectorAll('.bridge'),function(b){b.classList.remove('used');});
+  Array.prototype.forEach.call(document.querySelectorAll('.land'),function(l){l.classList.remove('cur');});
+  st.textContent='Выберите берег или остров, с которого начнёте путь.';
+});
+
+/* ---------- QUIZ ---------- */
+var QUIZ=[
+{q:'В честь кого назван Кёнигсберг — «Королевская гора»?',o:['Прусского короля','Чешского короля Оттокара II','Императора Священной Римской империи','Великого магистра ордена'],a:1,n:'Своего короля у Пруссии тогда не было — до первого оставалось 446 лет.'},
+{q:'Кем формально был Иммануил Кант в 1758–1762 годах?',o:['Подданным Пруссии','Гражданином вольного города','Подданным Российской империи','Подданным Польши'],a:2,n:'Во время Семилетней войны провинция присягнула императрице Елизавете.'},
+{q:'Когда Восточная Пруссия впервые стала эксклавом?',o:['В 1701 году','В 1919-м, по Версальскому договору','В 1945-м','В 1991-м'],a:1,n:'Польский коридор отрезал её от Германии за четверть века до Потсдама.'},
+{q:'Как назывался Зеленоградск до 1946 года?',o:['Раушен','Тильзит','Пиллау','Кранц'],a:3,n:'Королевский курорт Cranz. Раушен — это Светлогорск, Тильзит — Советск, Пиллау — Балтийск.'},
+{q:'Что доказал Эйлер про семь мостов?',o:['Что маршрут есть, но один','Что пройти каждый ровно один раз невозможно','Что нужен восьмой мост','Что задача не решается математикой'],a:1,n:'Все четыре берега имеют нечётное число мостов — с этого началась теория графов.'},
+{q:'Где Янтарную комнату видели в последний раз?',o:['В Царском Селе','В Берлине','В Королевском замке Кёнигсберга','На дне Балтики'],a:2,n:'После штурма 1945 года её след обрывается. Загадка не раскрыта до сих пор.'}
+];
+var box=document.getElementById('quizBox'),score=0,answered=0,line=document.getElementById('scoreLine');
+QUIZ.forEach(function(item){
+  var q=document.createElement('div');q.className='q';
+  q.innerHTML='<div class="qq">'+item.q+'</div>';
+  var opts=document.createElement('div');opts.className='opts';
+  item.o.forEach(function(o,j){
+    var b=document.createElement('button');b.className='opt';b.textContent=o;
+    b.addEventListener('click',function(){
+      if(q.classList.contains('done'))return;
+      q.classList.add('done');answered++;
+      if(j===item.a){b.classList.add('right');score++;}
+      else{b.classList.add('wrong');opts.children[item.a].classList.add('right');}
+      Array.prototype.forEach.call(opts.children,function(x){x.disabled=true;});
+      if(answered===QUIZ.length){
+        var msg=score===6?'Кант бы пожал вам руку.':score>=4?'Отлично для первого визита.':score>=2?'Пруссия — дама сложная, перечитайте эпохи.':'Ничего: у переселенцев 1946-го знаний было ещё меньше.';
+        line.textContent=score+' из 6. '+msg;
+      }
+    });
+    opts.appendChild(b);
+  });
+  q.appendChild(opts);
+  var note=document.createElement('div');note.className='qnote';note.textContent=item.n;q.appendChild(note);
+  box.appendChild(q);
+});
+})();
+</script>
+</body>
+</html>
