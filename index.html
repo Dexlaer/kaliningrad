@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Кёнигсберг → Калининград · 800 лет на краю Балтики</title>
+<meta name="description" content="Интерактивная история Калининградской области: от пруссов и Тевтонского ордена до российского эксклава. Карта эпох, семь мостов Эйлера, хронология и квиз.">
+<meta property="og:title" content="Кёнигсберг → Калининград · 800 лет на краю Балтики">
+<meta property="og:description" content="Интерактивная история Калининградской области: карта эпох, семь мостов Эйлера, хронология и квиз.">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,600;0,700;1,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -48,7 +51,7 @@ a{color:var(--baltic)}
 .chip:hover{color:var(--amber);border-color:var(--amber)}
 
 /* hero */
-.hero{padding:64px 0 26px;text-align:left}
+.hero{padding-top:64px;padding-bottom:26px;text-align:left}
 .hero h1{font-size:clamp(42px,9vw,74px)}
 .hero .arrow{color:var(--amber);font-style:italic;font-weight:600}
 .hero p{margin-top:14px;color:var(--muted);max-width:58ch}
@@ -171,7 +174,7 @@ a{color:var(--baltic)}
 .q.done .qnote{display:block}
 .score{font-family:'Cormorant',serif;font-size:26px;font-weight:700;color:var(--amber);margin-top:6px;min-height:34px}
 
-.foot{padding:44px 0 60px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);margin-top:56px}
+.foot{padding-top:44px;padding-bottom:60px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);margin-top:56px}
 :focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
 </style>
@@ -284,7 +287,7 @@ a{color:var(--baltic)}
 <li><span class="yr">1255</span><span>Над рекой Прегель заложен замок Кёнигсберг — «Королевская гора», в честь союзника похода, чешского короля Оттокара II.</span></li>
 <li><span class="yr">1333</span><span>На острове начинают строить Кафедральный собор — тот самый, что стоит и сейчас.</span></li>
 <li><span class="yr">1410</span><span>Грюнвальд: Польша и Литва громят орденское войско. Расцвет закончился.</span></li>
-<li><span class="yr">1457</span><span>Потеряв столицу Мариенбург, великий магистр переезжает в Кёнигсберг; орден — вассал Польши.</span></li>
+<li><span class="yr">1457</span><span>Потеряв столицу Мариенбург, великий магистр переезжает в Кёнигсберг. С 1466 года орден — вассал Польши.</span></li>
 </ul>
 <div class="fact"><b>Деталь</b>Кёнигсберг назван в честь короля Чехии. Собственный король появится у Пруссии только через 446 лет.</div>
 </div>
@@ -374,7 +377,7 @@ a{color:var(--baltic)}
 <ul class="events">
 <li><span class="yr">1991</span><span>Область отрезана от остальной России. Строго говоря, это полуэксклав: есть собственный выход к морю.</span></li>
 <li><span class="yr">1996</span><span>Особая экономическая зона — льготы для производства и сборки.</span></li>
-<li><span class="yr">2004</span><span>Польша и Литва вступают в ЕС и НАТО; наземный транзит — по упрощённому транзитному документу через Литву.</span></li>
+<li><span class="yr">2004</span><span>Польша и Литва вступают в ЕС (в НАТО Польша — с 1999-го, Литва — с 2004-го); наземный транзит — по упрощённому транзитному документу через Литву.</span></li>
 <li><span class="yr">2005</span><span>750-летие города; восстановленный Кафедральный собор и могила Канта — снова его сердце.</span></li>
 <li><span class="yr">2018</span><span>Матчи чемпионата мира по футболу на новом стадионе.</span></li>
 <li><span class="yr">2022</span><span>Сухопутный транзит части грузов ограничен; растут паромные линии Усть-Луга — Балтийск и авиасообщение.</span></li>
@@ -471,8 +474,8 @@ var ERAS=[
  lg:[[C.ger,'Германская империя'],[C.rus,'Российская империя']],
  cap:'Пруссия объединила Германию — и растворилась в ней. Две империи теперь граничат напрямую.',dz:'Данциг',mem:'Мемель'},
 {k:'1920',btn:'1920 · Версаль',f:{de:C.ger,bb:C.ger,cor:C.pol,dz:C.free,epn:C.ger,eps:C.ger,mem:C.lit,lt:C.lit,pl:C.pol},
- lg:[[C.ger,'Германия'],[C.pol,'Польша (коридор)'],[C.free,'Данциг — вольный город'],[C.lit,'Литва']],
- cap:'Польский коридор отрезал Восточную Пруссию. Первый раз эксклав — пока немецкий.',dz:'Данциг',mem:'Мемель'},
+ lg:[[C.ger,'Германия'],[C.pol,'Польша (коридор)'],[C.free,'Данциг — вольный город'],[C.lit,'Литва (Мемель — с 1923-го)']],
+ cap:'Польский коридор отрезал Восточную Пруссию. Первый раз эксклав — пока немецкий. Мемельский край сначала под Лигой Наций, с 1923-го — у Литвы.',dz:'Данциг',mem:'Мемель'},
 {k:'1945',btn:'1945 · Раздел',f:{de:C.neu,bb:C.neu,cor:C.pol,dz:C.pol,epn:C.rus,eps:C.pol,mem:C.rus,lt:C.rus,pl:C.pol},
  lg:[[C.rus,'СССР'],[C.pol,'Польша'],[C.neu,'Германия (зоны оккупации)']],
  cap:'Потсдам: север — СССР, юг — Польше, Мемель — Литовской ССР. Кёнигсберг становится Калининградом.',dz:'Гданьск',mem:'Клайпеда'},
