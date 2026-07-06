@@ -59,7 +59,14 @@ h2{font-size:clamp(28px,5vw,38px);margin-bottom:8px}
 h3{font-size:22px}
 .kicker{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);margin-bottom:10px}
 .sub{color:var(--muted);max-width:56ch}
-section{position:relative;isolation:isolate;padding:52px 0 10px;scroll-margin-top:76px}
+section{
+  --section-tint:rgba(111,163,155,.07);
+  --section-warm:rgba(226,154,60,.035);
+  position:relative;
+  isolation:isolate;
+  padding:52px 0 10px;
+  scroll-margin-top:76px;
+}
 section::before,.hero::before,.foot::before{
   content:'';
   position:absolute;
@@ -70,6 +77,16 @@ section::before,.hero::before,.foot::before{
   transform:translateX(-50%);
   z-index:-1;
   pointer-events:none;
+}
+section::before{
+  top:-28px;
+  bottom:-28px;
+  background:
+    radial-gradient(780px 360px at 18% 16%, var(--section-tint), transparent 62%),
+    radial-gradient(720px 340px at 86% 68%, var(--section-warm), transparent 64%),
+    repeating-linear-gradient(90deg, transparent 0 118px, rgba(235,223,200,.024) 119px 120px, transparent 121px 240px),
+    linear-gradient(180deg, rgba(20,16,9,.02), rgba(20,16,9,.18) 46%, rgba(20,16,9,.03));
+  opacity:.78;
 }
 a{color:var(--baltic)}
 
@@ -113,46 +130,14 @@ a{color:var(--baltic)}
 .hero .strip span{padding-top:10px;border-top:1px solid rgba(226,154,60,.24)}
 .hero .strip span b{display:block;color:var(--parchment);font-weight:500;font-size:13px;margin-bottom:2px}
 
-#map::before{
-  background:
-    linear-gradient(180deg, rgba(16,43,50,.62), rgba(20,16,9,.18) 64%, transparent),
-    repeating-linear-gradient(0deg, transparent 0 23px, rgba(111,163,155,.045) 24px 25px, transparent 26px 62px);
-}
-#why::before{
-  background:
-    linear-gradient(100deg, rgba(74,111,165,.16), transparent 36%),
-    linear-gradient(180deg, transparent, rgba(226,154,60,.06) 45%, transparent);
-}
-#eras::before{
-  background:
-    linear-gradient(180deg, rgba(32,25,16,.62), rgba(16,24,26,.28) 52%, rgba(32,25,16,.2)),
-    repeating-linear-gradient(90deg, transparent 0 140px, rgba(226,154,60,.055) 141px 142px, transparent 143px 260px);
-}
-#powers::before{
-  background:
-    linear-gradient(135deg, rgba(74,111,165,.22), transparent 42%),
-    linear-gradient(180deg, transparent, rgba(12,32,38,.32), transparent);
-}
-#bridges::before{
-  background:
-    linear-gradient(180deg, rgba(12,38,44,.54), rgba(20,16,9,.1)),
-    repeating-linear-gradient(102deg, transparent 0 48px, rgba(111,163,155,.06) 49px 52px, transparent 53px 96px);
-}
-#route::before{
-  background:
-    linear-gradient(120deg, rgba(124,154,92,.16), transparent 38%),
-    linear-gradient(180deg, transparent, rgba(226,154,60,.045), transparent);
-}
-#today::before{
-  background:
-    linear-gradient(180deg, rgba(20,16,9,.16), rgba(15,39,43,.42), rgba(20,16,9,.08)),
-    repeating-linear-gradient(90deg, transparent 0 68px, rgba(235,223,200,.035) 69px 70px, transparent 71px 160px);
-}
-#quiz::before{
-  background:
-    linear-gradient(135deg, rgba(168,75,63,.11), transparent 34%),
-    linear-gradient(180deg, rgba(20,16,9,.05), rgba(20,16,9,.68));
-}
+#map{--section-tint:rgba(111,163,155,.11);--section-warm:rgba(226,154,60,.03)}
+#why{--section-tint:rgba(74,111,165,.075);--section-warm:rgba(226,154,60,.04)}
+#eras{--section-tint:rgba(111,163,155,.06);--section-warm:rgba(226,154,60,.055)}
+#powers{--section-tint:rgba(74,111,165,.085);--section-warm:rgba(226,154,60,.035)}
+#bridges{--section-tint:rgba(111,163,155,.1);--section-warm:rgba(226,154,60,.032)}
+#route{--section-tint:rgba(124,154,92,.07);--section-warm:rgba(226,154,60,.04)}
+#today{--section-tint:rgba(111,163,155,.085);--section-warm:rgba(226,154,60,.035)}
+#quiz{--section-tint:rgba(111,163,155,.055);--section-warm:rgba(168,75,63,.04)}
 
 /* cards */
 .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px}
