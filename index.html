@@ -137,6 +137,7 @@ a{color:var(--baltic)}
 #eras{--section-tint:rgba(111,163,155,.06);--section-warm:rgba(226,154,60,.055)}
 #powers{--section-tint:rgba(74,111,165,.085);--section-warm:rgba(226,154,60,.035)}
 #bridges{--section-tint:rgba(111,163,155,.1);--section-warm:rgba(226,154,60,.032)}
+#castle{--section-tint:rgba(74,111,165,.09);--section-warm:rgba(226,154,60,.045)}
 #route{--section-tint:rgba(124,154,92,.07);--section-warm:rgba(226,154,60,.04)}
 #today{--section-tint:rgba(111,163,155,.085);--section-warm:rgba(226,154,60,.035)}
 #quiz{--section-tint:rgba(111,163,155,.055);--section-warm:rgba(168,75,63,.04)}
@@ -224,6 +225,16 @@ a{color:var(--baltic)}
 .status b{color:var(--amber)}
 .reset{margin-top:8px;background:transparent;border:1px solid var(--line);color:var(--parchment);padding:9px 16px;border-radius:999px;font:500 13.5px 'IBM Plex Sans',sans-serif;cursor:pointer}
 .reset:hover{border-color:var(--amber)}
+
+/* castle 3d */
+.castle-box{position:relative;margin-top:18px;aspect-ratio:16/10;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:radial-gradient(440px 240px at 50% 66%, rgba(226,154,60,.1), transparent 72%),var(--panel)}
+.castle-box iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.castle-load{position:absolute;inset:0;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:none;border:0;cursor:pointer;color:var(--parchment);font-family:'IBM Plex Sans',sans-serif}
+.castle-load svg{width:130px;height:auto;opacity:.8}
+.castle-load .cta{background:var(--amber);color:#1a1207;font-weight:600;font-size:13.5px;padding:11px 20px;border-radius:999px;transition:transform .2s}
+.castle-load:hover .cta{transform:translateY(-1px)}
+.castle-load .note{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--muted)}
+.castle-cap{margin-top:12px;font-size:13.5px;color:var(--muted);line-height:1.6}
 
 /* route */
 .route{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
@@ -342,6 +353,7 @@ a{color:var(--baltic)}
 <a class="chip" href="#eras">История</a>
 <a class="chip" href="#powers">Четыре силы</a>
 <a class="chip" href="#bridges">Мосты Эйлера</a>
+<a class="chip" href="#castle">3D-замок</a>
 <a class="chip" href="#route">Ваш маршрут</a>
 <a class="chip" href="#today">Сегодня</a>
 <a class="chip" href="#quiz">Квиз</a>
@@ -581,6 +593,27 @@ a{color:var(--baltic)}
 </div>
 </section>
 
+<section id="castle" class="wrap">
+<div class="kicker">Утраченное</div>
+<h2>Замок, которого нет</h2>
+<p class="sub">Королевский замок стоял здесь семь веков — от рыцарей 1255 года до штурма 1945-го. Руины пережили войну ещё на двадцать лет: в 1967–69 их взорвали. Покрутите 3D-реконструкцию — так замок выглядел незадолго до гибели.</p>
+<div class="castle-box">
+<button class="castle-load" id="castleLoad" aria-label="Загрузить 3D-модель Королевского замка">
+<svg viewBox="0 0 200 120" fill="none" stroke="#e2b571" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
+<path d="M30,110 L30,58 L42,58 L42,48 L54,48 L54,58 L66,58 L66,110"/>
+<path d="M66,84 L92,84 M108,84 L134,84"/>
+<path d="M84,110 L84,94 Q100,82 116,94 L116,110"/>
+<path d="M134,110 L134,44 L146,44 L146,34 L158,34 L158,44 L170,44 L170,110"/>
+<path d="M92,84 L92,32 L100,14 L108,32 L108,84"/>
+<path d="M20,110 L180,110"/>
+</svg>
+<span class="cta">Загрузить 3D-модель</span>
+<span class="note">интерактив · Sketchfab · тянет трафик</span>
+</button>
+</div>
+<p class="castle-cap">Реконструкция — <a href="https://sketchfab.com/3d-models/konigsberger-schloss-9948c05a9d324de093ee3657b11db420" target="_blank" rel="noopener">кафедра исторической информатики МГУ</a>. Вживую: VR-экскурсия у <a href="https://sobor39.ru" target="_blank" rel="noopener">Кафедрального собора</a>, движущиеся макеты в музее «Кёнигсберг» в Зеленоградске и макет 1:25 в парке «История в архитектуре».</p>
+</section>
+
 <section id="route" class="wrap">
 <div class="kicker">Прикладное</div>
 <h2>Ваш маршрут — на языке 1945 года</h2>
@@ -744,6 +777,19 @@ document.getElementById('brReset').addEventListener('click',function(){
   Array.prototype.forEach.call(document.querySelectorAll('.bridge'),function(b){b.classList.remove('used');});
   Array.prototype.forEach.call(document.querySelectorAll('.land'),function(l){l.classList.remove('cur');});
   st.textContent='Выберите берег или остров, с которого начнёте путь.';
+});
+
+/* ---------- CASTLE 3D ---------- */
+var castleLoad=document.getElementById('castleLoad');
+castleLoad.addEventListener('click',function(){
+  var box=castleLoad.parentElement;
+  var ifr=document.createElement('iframe');
+  ifr.src='https://sketchfab.com/models/9948c05a9d324de093ee3657b11db420/embed?autostart=1&ui_theme=dark&dnt=1';
+  ifr.title='3D-модель Королевского замка Кёнигсберга';
+  ifr.allow='autoplay; fullscreen; xr-spatial-tracking';
+  ifr.setAttribute('allowfullscreen','');
+  box.appendChild(ifr);
+  castleLoad.remove();
 });
 
 /* ---------- QUIZ ---------- */
