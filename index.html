@@ -196,6 +196,7 @@ a{color:var(--baltic)}
 .era-body{display:none;padding:0 20px 20px;border-top:1px solid var(--line)}
 .era.open .era-body{display:block}
 .era-body .lead{padding-top:16px;font-size:16.5px}
+.era-img{display:block;width:100%;max-height:280px;object-fit:cover;border-radius:10px;border:1px solid var(--line);margin-top:16px}
 .events{list-style:none;margin-top:14px}
 .events li{display:flex;gap:14px;padding:9px 0;border-bottom:1px dashed rgba(226,154,60,.12);font-size:15px;color:#d8ccb6}
 .events li:last-child{border-bottom:none}
@@ -227,6 +228,7 @@ a{color:var(--baltic)}
 /* route */
 .route{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
 .place{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.place-img{display:block;width:calc(100% + 36px);max-width:none;margin:-18px -18px 14px;max-height:190px;object-fit:cover;border-radius:var(--r) var(--r) 0 0}
 .place .de{font-family:'Cormorant',serif;font-style:italic;font-size:16px;color:var(--baltic)}
 .place h3{margin-bottom:2px}
 .place p{font-size:14.5px;color:#d8ccb6;margin-top:8px}
@@ -412,6 +414,7 @@ a{color:var(--baltic)}
 <div class="era open" id="era1">
 <button class="era-head"><span class="era-yrs">до 1230-х</span><h3>Пруссы: народ, отдавший имя</h3><span class="chev">▼</span></button>
 <div class="era-body">
+<img class="era-img" src="img/era1.jpg" alt="Пруссы у священного дуба и деревянного идола" loading="lazy" width="1200" height="800">
 <p class="lead">Между Вислой и Неманом тысячу лет жили пруссы — балтские племена, родня литовцев и латышей. Не германцы и не славяне: язычники со священными рощами и культом коня.</p>
 <ul class="events">
 <li><span class="yr">ок. I в.</span><span>Римские купцы приходят сюда за янтарём — «золото Балтики» уходит по Янтарному пути в Средиземноморье.</span></li>
@@ -425,6 +428,7 @@ a{color:var(--baltic)}
 <div class="era" id="era2">
 <button class="era-head"><span class="era-yrs">1230–1525</span><h3>Тевтонский орден</h3><span class="chev">▼</span></button>
 <div class="era-body">
+<img class="era-img" src="img/era2.jpg" alt="Тевтонские рыцари у кирпичного замка над рекой" loading="lazy" width="1200" height="800">
 <p class="lead">Немецкие рыцари-монахи, приглашённые крестить пруссов, за полвека покоряют их — и строят на этой земле собственное государство.</p>
 <ul class="events">
 <li><span class="yr">1226</span><span>Польский князь Конрад Мазовецкий зовёт орден против пруссов; император жалует рыцарям все будущие завоевания.</span></li>
@@ -440,6 +444,7 @@ a{color:var(--baltic)}
 <div class="era" id="era3">
 <button class="era-head"><span class="era-yrs">1525–1701</span><h3>Герцогство: первый протестантский эксперимент</h3><span class="chev">▼</span></button>
 <div class="era-body">
+<img class="era-img" src="img/era3.jpg" alt="Герцог снимает орденский плащ; печатный станок и учёные" loading="lazy" width="1200" height="800">
 <p class="lead">Последний магистр Альбрехт по совету Лютера снимает орденский плащ — и превращает монашеское государство в светское герцогство.</p>
 <ul class="events">
 <li><span class="yr">1525</span><span>Секуляризация: герцогство Пруссия — первое в мире государство, где лютеранство стало официальной религией. Пока — вассал польского короля.</span></li>
@@ -455,6 +460,7 @@ a{color:var(--baltic)}
 <div class="era" id="era4">
 <button class="era-head"><span class="era-yrs">1701–1871</span><h3>Королевство: взлёт</h3><span class="chev">▼</span></button>
 <div class="era-body">
+<img class="era-img" src="img/era4.jpg" alt="Кёнигсберг XVIII века: мосты через Прегель и философ на набережной" loading="lazy" width="1200" height="800">
 <p class="lead">18 января 1701 года курфюрст Фридрих сам возлагает на себя корону — здесь, в Кёнигсберге.</p>
 <ul class="events">
 <li><span class="yr">1701</span><span>Титул звучит «король в Пруссии»: короноваться «в Бранденбурге» нельзя — тот внутри империи, где король уже есть. Пруссия — снаружи. Так провинция дала имя всему государству.</span></li>
@@ -472,6 +478,7 @@ a{color:var(--baltic)}
 <div class="era" id="era5">
 <button class="era-head"><span class="era-yrs">1871–1918</span><h3>Внутри Германской империи</h3><span class="chev">▼</span></button>
 <div class="era-body">
+<img class="era-img" src="img/era5.jpg" alt="Порт Кёнигсберга около 1900 года: пароходы и склады" loading="lazy" width="1200" height="800">
 <p class="lead">Пруссия побеждает Австрию, затем Францию — и собирает вокруг себя Германию. Кёнигсберг — процветающий восточный форпост.</p>
 <ul class="events">
 <li><span class="yr">1866</span><span>Кёниггрец: Австрия выбита из германского проекта. Объединение пойдёт «по-прусски».</span></li>
@@ -486,6 +493,7 @@ a{color:var(--baltic)}
 <div class="era" id="era6">
 <button class="era-head"><span class="era-yrs">1919–1945</span><h3>Отрезание и катастрофа</h3><span class="chev">▼</span></button>
 <div class="era-body">
+<img class="era-img" src="img/era6.jpg" alt="Руины города после бомбардировок, дым над собором" loading="lazy" width="1200" height="800">
 <p class="lead">Версальский мир перекраивает карту — и Восточная Пруссия впервые становится островом.</p>
 <ul class="events">
 <li><span class="yr">1919</span><span>Польский коридор и вольный город Данциг: провинция отрезана от Германии. «Коридор» станет формальным поводом ко Второй мировой.</span></li>
@@ -501,6 +509,7 @@ a{color:var(--baltic)}
 <div class="era" id="era7">
 <button class="era-head"><span class="era-yrs">1945–1991</span><h3>Советский Калининград</h3><span class="chev">▼</span></button>
 <div class="era-body">
+<img class="era-img" src="img/era7.jpg" alt="Советский Калининград 1950-х: трамвай, траулеры, стройка" loading="lazy" width="1200" height="800">
 <p class="lead">Потсдам делит провинцию, а 1946 год меняет здесь всё: имена, людей, язык.</p>
 <ul class="events">
 <li><span class="yr">1945</span><span>Потсдамская конференция: север с Кёнигсбергом — СССР, юг — Польше, Мемель — Литовской ССР.</span></li>
@@ -517,6 +526,7 @@ a{color:var(--baltic)}
 <div class="era" id="era8">
 <button class="era-head"><span class="era-yrs">1991 — сейчас</span><h3>Эксклав</h3><span class="chev">▼</span></button>
 <div class="era-body">
+<img class="era-img" src="img/era8.jpg" alt="Современный Калининград: восстановленный собор на острове Канта в сумерках" loading="lazy" width="1200" height="800">
 <p class="lead">СССР распадается — и условная линия с Литвой в одну ночь становится государственной границей.</p>
 <ul class="events">
 <li><span class="yr">1991</span><span>Область отрезана от остальной России. Строго говоря, это полуэксклав: есть собственный выход к морю.</span></li>
@@ -576,10 +586,10 @@ a{color:var(--baltic)}
 <h2>Ваш маршрут — на языке 1945 года</h2>
 <p class="sub">Каждое место здесь прожило две жизни. Немецкое имя — курсивом.</p>
 <div class="route">
-<div class="place here"><span class="tag">вы здесь</span><h3>Орловка</h3><div class="de">Nesselbeck · «Крапивный ручей»</div><p>Дворянское имение XVIII века семьи Нойманн-Фельдберг из Мекленбурга — почти 500 гектаров по обе стороны ручья. От фольварка уцелел главный дом: его отреставрировали в 2000-х — это и есть ваш отель «Усадьба». Соседний «замок Нессельбек» — новодел по мотивам.</p></div>
-<div class="place"><h3>Зеленоградск</h3><div class="de">Cranz</div><p>Королевский морской курорт с 1816 года, главная здравница Восточной Пруссии. Сегодня — променад, довоенные виллы и неофициальная столица котов.</p></div>
-<div class="place"><h3>Светлогорск</h3><div class="de">Rauschen</div><p>Курорт в соснах на высоких дюнах; водонапорная башня 1908 года — символ города. Прусская курортная архитектура уцелела здесь лучше, чем где-либо в области.</p></div>
-<div class="place"><h3>Куршская коса</h3><div class="de">Kurische Nehrung</div><p>98 километров песчаной стрелы между морем и заливом, объект ЮНЕСКО. Странствующие дюны, «танцующий лес», старейшая орнитологическая станция. Немцы звали косу «прусской Сахарой».</p></div>
+<div class="place here"><img class="place-img" src="img/route-orlovka.jpg" alt="Усадьба Нессельбек: господский дом у ручья, липовая аллея" loading="lazy" width="1200" height="800"><span class="tag">вы здесь</span><h3>Орловка</h3><div class="de">Nesselbeck · «Крапивный ручей»</div><p>Дворянское имение XVIII века семьи Нойманн-Фельдберг из Мекленбурга — почти 500 гектаров по обе стороны ручья. От фольварка уцелел главный дом: его отреставрировали в 2000-х — это и есть ваш отель «Усадьба». Соседний «замок Нессельбек» — новодел по мотивам.</p></div>
+<div class="place"><img class="place-img" src="img/route-zelenogradsk.jpg" alt="Променад Кранца около 1900 года, кот на перилах" loading="lazy" width="1200" height="800"><h3>Зеленоградск</h3><div class="de">Cranz</div><p>Королевский морской курорт с 1816 года, главная здравница Восточной Пруссии. Сегодня — променад, довоенные виллы и неофициальная столица котов.</p></div>
+<div class="place"><img class="place-img" src="img/route-svetlogorsk.jpg" alt="Водонапорная башня Раушена среди сосен на дюнах" loading="lazy" width="1200" height="800"><h3>Светлогорск</h3><div class="de">Rauschen</div><p>Курорт в соснах на высоких дюнах; водонапорная башня 1908 года — символ города. Прусская курортная архитектура уцелела здесь лучше, чем где-либо в области.</p></div>
+<div class="place"><img class="place-img" src="img/route-kosa.jpg" alt="Странствующие дюны Куршской косы между морем и заливом" loading="lazy" width="1200" height="800"><h3>Куршская коса</h3><div class="de">Kurische Nehrung</div><p>98 километров песчаной стрелы между морем и заливом, объект ЮНЕСКО. Странствующие дюны, «танцующий лес», старейшая орнитологическая станция. Немцы звали косу «прусской Сахарой».</p></div>
 </div>
 </section>
 
