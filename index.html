@@ -268,6 +268,17 @@ a{color:var(--baltic)}
 .q.done .qnote{display:block}
 .score{font-family:'Cormorant',serif;font-size:26px;font-weight:700;color:var(--amber);margin-top:6px;min-height:34px}
 
+/* dot toc + progress */
+.dotnav{position:fixed;left:18px;top:50%;transform:translateY(-50%);z-index:60;display:flex;flex-direction:column;gap:14px}
+.dotnav a{position:relative;display:block;width:10px;height:10px;border-radius:50%;background:rgba(226,154,60,.16);border:1px solid rgba(226,154,60,.4);transition:background .3s,border-color .3s,transform .2s}
+.dotnav a.passed{background:var(--amber);border-color:var(--amber);opacity:.5}
+.dotnav a.cur{background:var(--amber);border-color:var(--amber);transform:scale(1.4)}
+.dotnav a:hover{transform:scale(1.4)}
+.dotnav a .tip{position:absolute;left:22px;top:50%;transform:translateY(-50%);white-space:nowrap;background:var(--panel2);border:1px solid var(--line);color:var(--parchment);font:500 12px 'IBM Plex Sans',sans-serif;padding:5px 11px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .2s}
+.dotnav a:hover .tip,.dotnav a:focus-visible .tip{opacity:1}
+@media(max-width:860px){.dotnav{display:none}}
+.progress{position:fixed;top:0;left:0;height:2px;width:0;background:var(--amber);z-index:70;pointer-events:none}
+
 .foot{padding-top:44px;padding-bottom:60px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);margin-top:56px}
 :focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 @media(max-width:560px){
@@ -291,7 +302,7 @@ a{color:var(--baltic)}
 </style>
 </head>
 <body>
-<header class="hero wrap">
+<header class="hero wrap" id="hero">
 <div class="kicker">Интерактивная история · 800 лет</div>
 <h1>Кёнигсберг <span class="arrow">→</span> <span class="grad">Калининград</span></h1>
 <p>Сайт-путешествие на несколько минут: как земля пруссов стала орденом, королевством, собравшим Германию, — и самым западным регионом России. Внутри — <b>карта эпох</b>, <b>игра с мостами Эйлера</b>, <b>хронология</b> и <b>квиз</b>.</p>
@@ -778,6 +789,44 @@ document.getElementById('brReset').addEventListener('click',function(){
   Array.prototype.forEach.call(document.querySelectorAll('.land'),function(l){l.classList.remove('cur');});
   st.textContent='Выберите берег или остров, с которого начнёте путь.';
 });
+
+/* ---------- DOT TOC + PROGRESS ---------- */
+var SECTS=[['hero','Начало'],['map','Карта эпох'],['why','Почему эксклав'],['eras','История'],['powers','Четыре силы'],['bridges','Мосты Эйлера'],['castle','3D-замок'],['route','Маршрут'],['today','Сегодня'],['quiz','Квиз']];
+var dotnav=document.createElement('nav');
+dotnav.className='dotnav';
+dotnav.setAttribute('aria-label','Оглавление страницы');
+SECTS.forEach(function(s){
+  var a=document.createElement('a');
+  a.href='#'+s[0];
+  a.setAttribute('aria-label',s[1]);
+  var tip=document.createElement('span');tip.className='tip';tip.textContent=s[1];
+  a.appendChild(tip);
+  dotnav.appendChild(a);
+});
+document.body.appendChild(dotnav);
+var pbar=document.createElement('div');
+pbar.className='progress';
+document.body.appendChild(pbar);
+function updNav(){
+  var vh=window.innerHeight;
+  var max=document.documentElement.scrollHeight-vh;
+  pbar.style.width=(max>0?Math.min(100,window.scrollY/max*100):0)+'%';
+  var curI=0;
+  SECTS.forEach(function(s,i){
+    var el=document.getElementById(s[0]);
+    if(el&&el.getBoundingClientRect().top<=vh*0.4)curI=i;
+  });
+  Array.prototype.forEach.call(dotnav.children,function(d,i){
+    d.classList.toggle('cur',i===curI);
+    d.classList.toggle('passed',i<curI);
+  });
+}
+var navTick=false;
+window.addEventListener('scroll',function(){
+  if(!navTick){navTick=true;requestAnimationFrame(function(){navTick=false;updNav();});}
+},{passive:true});
+window.addEventListener('resize',updNav);
+updNav();
 
 /* ---------- CASTLE 3D ---------- */
 var castleLoad=document.getElementById('castleLoad');
