@@ -8,6 +8,7 @@
 <meta property="og:title" content="Кёнигсберг → Калининград · 800 лет на краю Балтики">
 <meta property="og:description" content="Интерактивная история Калининградской области: карта эпох, семь мостов Эйлера, хронология и квиз.">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,600;0,700;1,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
 :root{
   --ink:#141009;
@@ -138,8 +139,10 @@ a{color:var(--baltic)}
 #powers{--section-tint:rgba(74,111,165,.085);--section-warm:rgba(226,154,60,.035)}
 #bridges{--section-tint:rgba(111,163,155,.1);--section-warm:rgba(226,154,60,.032)}
 #castle{--section-tint:rgba(74,111,165,.09);--section-warm:rgba(226,154,60,.045)}
+#places{--section-tint:rgba(111,163,155,.105);--section-warm:rgba(226,154,60,.04)}
 #route{--section-tint:rgba(124,154,92,.07);--section-warm:rgba(226,154,60,.04)}
 #today{--section-tint:rgba(111,163,155,.085);--section-warm:rgba(226,154,60,.035)}
+#audio{--section-tint:rgba(74,111,165,.075);--section-warm:rgba(226,154,60,.045)}
 #quiz{--section-tint:rgba(111,163,155,.055);--section-warm:rgba(168,75,63,.04)}
 
 /* cards */
@@ -236,6 +239,34 @@ a{color:var(--baltic)}
 .castle-load .note{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--muted)}
 .castle-cap{margin-top:12px;font-size:13.5px;color:var(--muted);line-height:1.6}
 
+/* places map */
+.places-shell{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:14px;margin-top:18px}
+.places-map{min-height:520px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--panel)}
+#placesMap{height:100%;min-height:520px}
+.leaflet-container{font-family:'IBM Plex Sans',system-ui,sans-serif;background:#13242a;color:#1a1207}
+.leaflet-tile{filter:sepia(.18) saturate(.72) brightness(.82) contrast(.95)}
+.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#201810;color:var(--parchment)}
+.leaflet-popup-content{margin:10px 12px;font-size:13px}
+.place-marker{width:28px;height:28px;border-radius:50%;background:var(--amber);border:3px solid #181109;box-shadow:0 0 0 2px rgba(226,154,60,.35),0 8px 18px rgba(0,0,0,.35)}
+.place-marker.food{background:#d2a75a}.place-marker.sea{background:#6fa39b}.place-marker.war1945{background:#a84b3f}.place-marker.soviet{background:#8f8b7d}.place-marker.art{background:#b990d4}.place-marker.religion{background:#d8c58a}.place-marker.konigsberg{background:#e29a3c}
+.places-panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;min-height:520px}
+.places-filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.filter-btn{background:var(--panel2);border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:8px 12px;font:500 12.5px 'IBM Plex Sans',sans-serif;cursor:pointer}
+.filter-btn.on{background:var(--amber);border-color:var(--amber);color:#1a1207}
+.places-meta{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--muted);margin-bottom:12px}
+.place-card h3{font-size:25px;margin-bottom:4px}
+.place-address{color:var(--baltic);font-size:13.5px;margin-bottom:10px}
+.open-badge{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:999px;padding:5px 9px;margin-bottom:12px;font-size:12.5px;color:var(--muted)}
+.open-badge::before{content:'';width:7px;height:7px;border-radius:50%;background:#a84b3f}
+.open-badge.open{color:#dbe6c8}.open-badge.open::before{background:#7c9a5c}
+.place-card p{font-size:14.5px;color:#d8ccb6;margin-top:10px}
+.place-card .label{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);display:block;margin:14px 0 3px}
+.place-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.place-actions a{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:999px;padding:9px 13px;text-decoration:none;color:var(--parchment);font-size:13px;font-weight:600;background:var(--panel2)}
+.place-actions a.primary{background:var(--amber);border-color:var(--amber);color:#1a1207}
+.places-note{font-size:12.5px;color:var(--muted);margin-top:12px}
+@media(max-width:760px){.places-shell{grid-template-columns:1fr}.places-map,#placesMap,.places-panel{min-height:430px}}
+
 /* route */
 .route{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
 .place{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px}
@@ -254,6 +285,16 @@ a{color:var(--baltic)}
 .stat .l{font-size:12px;color:var(--muted);margin-top:5px}
 @media(max-width:640px){.stats{grid-template-columns:1fr 1fr}}
 .today-tx{color:#d8ccb6;font-size:15.5px;max-width:66ch}
+
+/* audio */
+.audio-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+.audio-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.audio-card h3{margin-bottom:6px}
+.audio-card p{font-size:14.5px;color:#d8ccb6;margin-bottom:12px}
+.audio-card audio{width:100%;display:block;margin:10px 0 12px;accent-color:var(--amber)}
+.download{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:999px;padding:9px 14px;text-decoration:none;color:var(--parchment);font-size:13px;font-weight:600;background:var(--panel2)}
+.download:hover{border-color:var(--amber)}
+@media(max-width:640px){.audio-grid{grid-template-columns:1fr}}
 
 /* quiz */
 .q{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-bottom:12px}
@@ -365,8 +406,10 @@ a{color:var(--baltic)}
 <a class="chip" href="#powers">Четыре силы</a>
 <a class="chip" href="#bridges">Мосты Эйлера</a>
 <a class="chip" href="#castle">3D-замок</a>
+<a class="chip" href="#places">Музеи и места</a>
 <a class="chip" href="#route">Ваш маршрут</a>
 <a class="chip" href="#today">Сегодня</a>
+<a class="chip" href="#audio">Аудио</a>
 <a class="chip" href="#quiz">Квиз</a>
 </div></nav>
 
@@ -625,6 +668,21 @@ a{color:var(--baltic)}
 <p class="castle-cap">Реконструкция — <a href="https://sketchfab.com/3d-models/konigsberger-schloss-9948c05a9d324de093ee3657b11db420" target="_blank" rel="noopener">кафедра исторической информатики МГУ</a>. Вживую: VR-экскурсия у <a href="https://sobor39.ru" target="_blank" rel="noopener">Кафедрального собора</a>, движущиеся макеты в музее «Кёнигсберг» в Зеленоградске и макет 1:25 в парке «История в архитектуре».</p>
 </section>
 
+<section id="places" class="wrap">
+<div class="kicker">Карта города</div>
+<h2>Музеи и места Калининграда</h2>
+<p class="sub">Точки для поездки из Орловки: фильтруйте по слоям, открывайте карточку, смотрите график, цену, время на визит и сразу стройте маршрут.</p>
+<div class="places-shell">
+<div class="places-map"><div id="placesMap" role="application" aria-label="Интерактивная карта музеев и мест Калининграда"></div></div>
+<aside class="places-panel">
+<div class="places-filters" id="placeFilters"></div>
+<div class="places-meta" id="placesMeta">Загрузка карты...</div>
+<article class="place-card" id="placeCard"></article>
+<p class="places-note">Цены и график актуальны на июль 2026: перед визитом проверяйте официальный сайт.</p>
+</aside>
+</div>
+</section>
+
 <section id="route" class="wrap">
 <div class="kicker">Прикладное</div>
 <h2>Ваш маршрут — на языке 1945 года</h2>
@@ -649,6 +707,26 @@ a{color:var(--baltic)}
 <p class="today-tx">Область живёт как остров: своя энергетика, свои паромы на Усть-Лугу, аэропорт Храброво как главная пуповина. Экономика — сборочные производства особой зоны, порт и рыба, янтарь, IT и стремительно выросший внутренний туризм: после 2020-го сюда поехала вся страна, и набережные Зеленоградска летом напоминают Сочи. При этом ощущение «немного Европы», которое вы поймали в центрах городов, — не иллюзия: брусчатка, черепица, форты и кирхи здесь старше самой области на столетия, и местные научились этим наследием дорожить — его реставрируют, обживают и превращают в идентичность, которой больше нет ни у одного российского региона.</p>
 </section>
 
+<section id="audio" class="wrap">
+<div class="kicker">Аудиогид</div>
+<h2>Послушать или скачать</h2>
+<p class="sub">Два готовых аудио: общий рассказ про Калининград и область, плюс отдельная биография Канта. Можно включить на прогулке или скачать заранее.</p>
+<div class="audio-grid">
+<article class="audio-card">
+<h3>Калининград и область</h3>
+<p>Короткий аудиорассказ о регионе: почему он особенный, как устроена история места и что важно заметить в поездке.</p>
+<audio controls preload="metadata" src="Аудио/Калининград.mp3"></audio>
+<a class="download" href="Аудио/Калининград.mp3" download>Скачать MP3</a>
+</article>
+<article class="audio-card">
+<h3>Иммануил Кант</h3>
+<p>Биография философа в контексте Кёнигсберга: город, университет, привычки, эпоха и след, который остался в Калининграде.</p>
+<audio controls preload="metadata" src="Аудио/Кант.mp3"></audio>
+<a class="download" href="Аудио/Кант.mp3" download>Скачать MP3</a>
+</article>
+</div>
+</section>
+
 <section id="quiz" class="wrap">
 <div class="kicker">Проверка</div>
 <h2>Шесть вопросов на янтарь</h2>
@@ -656,7 +734,8 @@ a{color:var(--baltic)}
 <div class="score" id="scoreLine"></div>
 </section>
 
-<footer class="foot wrap">Карты схематичны, границы упрощены — важна логика, а не геодезия. Собрано для поездки по бывшей Восточной Пруссии · июль 2026.</footer>
+<footer class="foot wrap">Карты схематичны, границы упрощены — важна логика, а не геодезия. Цены и график мест актуальны на июль 2026, проверяйте на официальных сайтах. Собрано для поездки по бывшей Восточной Пруссии · июль 2026.</footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 (function(){
 /* ---------- MAP ---------- */
@@ -790,8 +869,39 @@ document.getElementById('brReset').addEventListener('click',function(){
   st.textContent='Выберите берег или остров, с которого начнёте путь.';
 });
 
+/* ---------- PLACES MAP ---------- */
+var PLACE_CATS={all:'Все',konigsberg:'Кёнигсберг',war1945:'Штурм 1945',soviet:'Советский слой',sea:'Море и флот',art:'Искусство',religion:'Религия',food:'Еда'};
+var HOME={lat:54.781,lng:20.559,name:'Отель «Усадьба», Орловка'};
+var PLACES=[
+{id:'world-ocean-museum',name:'Музей Мирового океана',category:['sea'],lat:54.7066314,lng:20.5004759,address:'наб. Петра Великого, 1',website:'https://world-ocean.ru',description:'Крупнейший морской музей России: исторический флот, подлодка Б-413, «Витязь», траулер СРТ-129, плавучий маяк «Ирбенский» и новый корпус «Планета Океан».',why:'Подлодка изнутри — сильнейший экспонат города и отличная фактура для съёмки.',price:'Единый билет на 4 судна — 600 ₽. «Планета Океан» — 1200 ₽, билеты только онлайн.',hours:'Вт–вс 10:00–19:00, пн выходной. Суда — по сеансам.',hours_struct:{mon:null,tue:'10:00-19:00',wed:'10:00-19:00',thu:'10:00-19:00',fri:'10:00-19:00',sat:'10:00-19:00',sun:'10:00-19:00'},duration_min:150,tips:'Начинать с подлодки утром, пока нет очередей. Билеты на «Планету Океан» ловить в понедельник.'},
+{id:'kant-cathedral',name:'Кафедральный собор и могила Канта',category:['konigsberg','religion','art'],lat:54.7063834,lng:20.5120468,address:'остров Канта, ул. Канта, 1',website:'https://sobor39.ru',description:'Кирпичная готика XIV века, восстановленная из руин. У стены — кенотаф Канта, внутри музей философа и один из крупнейших органных комплексов России.',why:'Кант + орган. Мини-концерт на 45 минут — быстрый способ услышать главный инструмент города.',price:'Мини-концерт 700–1300 ₽, комбо «собор + концерт» около 1300 ₽.',hours:'Ежедневно 10:00–19:00. Мини-концерты: 12:00, 14:00, 18:00.',hours_struct:{mon:'10:00-19:00',tue:'10:00-19:00',wed:'10:00-19:00',thu:'10:00-19:00',fri:'10:00-19:00',sat:'10:00-19:00',sun:'10:00-19:00'},duration_min:60,tips:'На концерты летом лучше брать билеты заранее онлайн.'},
+{id:'amber-museum',name:'Музей янтаря',category:['art','konigsberg'],lat:54.7222288,lng:20.5230264,address:'пл. Маршала Василевского, 1',website:'https://ambermuseum.ru',description:'Единственный в России музей янтаря в башне Дона 1853 года: инклюзы, фрагменты Янтарной комнаты, мозаика «Русь» и ювелирные работы.',why:'Лучшее место понять, почему янтарь — местная религия.',price:'Около 430–500 ₽ взрослый.',hours:'Летом ежедневно 10:00–19:00, касса до 18:00.',hours_struct:{mon:'10:00-19:00',tue:'10:00-19:00',wed:'10:00-19:00',thu:'10:00-19:00',fri:'10:00-19:00',sat:'10:00-19:00',sun:'10:00-19:00'},duration_min:75,tips:'Рядом Верхнее озеро, Росгартенские ворота и хомлин-бабушка.'},
+{id:'bunker-museum',name:'Музей «Бункер»',category:['war1945'],lat:54.7133131,lng:20.5095112,address:'ул. Университетская, 2А',website:'https://koihm.ru',description:'Блиндаж генерала Отто Ляша на глубине 7 метров. Здесь 9 апреля 1945 года была подписана капитуляция Кёнигсберга.',why:'Точка, где Кёнигсберг перестал быть Кёнигсбергом. Компактно, концентрированно, кинематографично.',price:'300 ₽ взрослый, экскурсия +200 ₽.',hours:'Ежедневно 10:00–19:00.',hours_struct:{mon:'10:00-19:00',tue:'10:00-19:00',wed:'10:00-19:00',thu:'10:00-19:00',fri:'10:00-19:00',sat:'10:00-19:00',sun:'10:00-19:00'},duration_min:50,tips:'Под землёй нет связи — электронный билет сохранить заранее.'},
+{id:'altes-haus',name:'Альтес Хаус',category:['konigsberg'],lat:54.722013,lng:20.4744273,address:'ул. Красная, 11',website:'https://alteshaus.ru',description:'Музей-квартира кёнигсбергского торговца в доходном доме 1912 года. Подлинные вещи, которые можно трогать и открывать.',why:'Самое плотное погружение в довоенный Кёнигсберг: эпоха на ощупь.',price:'1200 ₽ с экскурсией. Комбо с Домом Китобоя около 1600–1800 ₽.',hours:'Пн–сб 10:00–19:00, воскресенье выходной. Только по сеансам.',hours_struct:{mon:'10:00-19:00',tue:'10:00-19:00',wed:'10:00-19:00',thu:'10:00-19:00',fri:'10:00-19:00',sat:'10:00-19:00',sun:null},duration_min:45,tips:'Амалиенау вокруг — лучший район для прогулки по немецким виллам.'},
+{id:'koihm-stadthalle',name:'Историко-художественный музей',category:['konigsberg','war1945','soviet'],lat:54.7138224,lng:20.518124,address:'ул. Клиническая, 21',website:'https://koihm.ru',description:'Главный краеведческий музей области в здании Штадтхалле 1912 года. Сильные залы: панорама «Кёнигсберг-45» и первые переселенцы.',why:'Закрывает слой «как Кёнигсберг стал Калининградом».',price:'500 ₽ основные экспозиции, панорама может оплачиваться отдельно.',hours:'Ежедневно 10:00–18:00, касса до 17:00.',hours_struct:{mon:'10:00-18:00',tue:'10:00-18:00',wed:'10:00-18:00',thu:'10:00-18:00',fri:'10:00-18:00',sat:'10:00-18:00',sun:'10:00-18:00'},duration_min:90,tips:'От Бункера 12 минут пешком вдоль Нижнего пруда.'},
+{id:'dom-kitoboya',name:'Дом Китобоя',category:['soviet'],lat:54.7194061,lng:20.4956932,address:'проспект Мира, 9-11',website:'https://domkitoboya.ru',description:'Музей-квартира советского Калининграда 1960–80-х: коммуналка из подлинных вещей эпохи китобойных флотилий, аудиоспектакль по воспоминаниям.',why:'Пара к Альтес Хаусу: «до 1945» и «после 1945» в двух квартирах.',price:'Около 600 ₽. Комбо с Альтес Хаусом около 1600–1800 ₽.',hours:'Ежедневно 10:00–19:00.',hours_struct:{mon:'10:00-19:00',tue:'10:00-19:00',wed:'10:00-19:00',thu:'10:00-19:00',fri:'10:00-19:00',sat:'10:00-19:00',sun:'10:00-19:00'},duration_min:60,tips:'Внизу кафетерий с десертами «из детства».'},
+{id:'friedland-gate',name:'Фридландские ворота',category:['konigsberg','war1945'],lat:54.6953718,lng:20.5217696,address:'ул. Дзержинского, 30',website:'http://fvmuseum.ru',description:'Музей истории города в неоготических воротах 1862 года. Главная фишка — виртуальная прогулка по улицам старого Кёнигсберга.',why:'Самый атмосферный способ «увидеть» разрушенный город.',price:'440 ₽ взрослый, VR-экскурсия +200 ₽.',hours:'Летом ежедневно 10:00–19:00; санитарный день — первая пятница месяца.',hours_struct:{mon:'10:00-19:00',tue:'10:00-19:00',wed:'10:00-19:00',thu:'10:00-19:00',fri:'10:00-19:00',sat:'10:00-19:00',sun:'10:00-19:00'},duration_min:100,tips:'От острова Канта около 15 минут пешком через Южный парк.'},
+{id:'royal-gate',name:'Королевские ворота',category:['konigsberg','sea'],lat:54.7137436,lng:20.5358827,address:'ул. Фрунзе, 112',website:'https://www.world-ocean.ru/korolevskie-vorota',description:'Парадные неоготические ворота 1850-х со статуями королей, филиал Музея Мирового океана. Экспозиция про Петра I и дипломатические связи города.',why:'Красивейшие из семи сохранившихся городских ворот.',price:'Около 300 ₽.',hours:'Ср 11:00–19:00, чт 12:00–20:00, пт–вс 11:00–19:00, пн–вт выходные.',hours_struct:{mon:null,tue:null,wed:'11:00-19:00',thu:'12:00-20:00',fri:'11:00-19:00',sat:'11:00-19:00',sun:'11:00-19:00'},duration_min:40,tips:'Удобно совмещать с Музеем янтаря — около 10 минут пешком.'},
+{id:'friedrichsburg-gate',name:'Фридрихсбургские ворота',category:['konigsberg','sea'],lat:54.7044943,lng:20.4934565,address:'ул. Портовая, 39',website:'https://www.world-ocean.ru',description:'Остаток крепости Фридрихсбург XVII века, где Пётр I учился артиллерийскому делу. Филиал ММО о рождении российского флота.',why:'Петровская точка №2 и самая «морская» из ворот.',price:'Около 100–300 ₽.',hours:'Ср–вс 10:00–18:00, пн–вт выходные.',hours_struct:{mon:null,tue:null,wed:'10:00-18:00',thu:'10:00-18:00',fri:'10:00-18:00',sat:'10:00-18:00',sun:'10:00-18:00'},duration_min:40,tips:'По пятницам в полдень со двора стреляет пушка.'},
+{id:'art-gallery-birzha',name:'Музей изобразительных искусств',category:['art','konigsberg'],lat:54.7050982,lng:20.5073333,address:'Ленинский проспект, 83',website:'http://kaliningradartmuseum.ru',description:'Областной музей ИЗО в здании Кёнигсбергской торговой биржи 1875 года: неоренессанс, львы на фасаде и выставки искусства региона.',why:'Само здание — половина визита и один из красивейших интерьеров города.',price:'Выставки около 200–350 ₽ каждая.',hours:'Ежедневно 10:00–19:00, по четвергам до 21:00.',hours_struct:{mon:'10:00-19:00',tue:'10:00-19:00',wed:'10:00-19:00',thu:'10:00-21:00',fri:'10:00-19:00',sat:'10:00-19:00',sun:'10:00-19:00'},duration_min:60,tips:'Стоит через мост от острова Канта — связывается в один пеший маршрут.'},
+{id:'marzipan-museum',name:'Музей марципана',category:['food','konigsberg'],lat:54.6973671,lng:20.4946122,address:'ул. Багратиона, 137',website:null,description:'Крошечный бесплатный музей кёнигсбергского марципана внутри Бранденбургских ворот: история рецепта, фигурки, дегустация и лавка.',why:'Быстрая точка «по пути» и лучший съедобный сувенир города.',price:'Вход свободный.',hours:'Ежедневно 10:00–21:00.',hours_struct:{mon:'10:00-21:00',tue:'10:00-21:00',wed:'10:00-21:00',thu:'10:00-21:00',fri:'10:00-21:00',sat:'10:00-21:00',sun:'10:00-21:00'},duration_min:25,tips:'5 минут пешком от Фридландских ворот — удобно связкой.'},
+{id:'new-synagogue',name:'Новая синагога',category:['religion','konigsberg'],lat:54.7058801,lng:20.5156833,address:'ул. Октябрьская, 1а',website:'https://kldsynagogue.com',description:'Воссозданная в 2018 году копия Кёнигсбергской синагоги 1896 года, сожжённой в Хрустальную ночь. Внутри экскурсии и музейная часть.',why:'Ещё один восстановленный слой города в двух шагах от собора.',price:'Экскурсия около 500 ₽, музей +200 ₽.',hours:'Экскурсии 11:00–17:00, пт до 16:00, суббота выходной.',hours_struct:{mon:'11:00-17:00',tue:'11:00-17:00',wed:'11:00-17:00',thu:'11:00-17:00',fri:'11:00-16:00',sat:null,sun:'11:00-17:00'},duration_min:50,tips:'Логично совмещать с островом Канта и Рыбной деревней.'}
+];
+var placeMap,placeMarkers=[],activeCat='all';
+function esc(s){return String(s||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function kalNow(){var parts=new Intl.DateTimeFormat('en-US',{timeZone:'Europe/Kaliningrad',weekday:'short',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date()),obj={};parts.forEach(function(p){obj[p.type]=p.value;});return {day:{Mon:'mon',Tue:'tue',Wed:'wed',Thu:'thu',Fri:'fri',Sat:'sat',Sun:'sun'}[obj.weekday],mins:+obj.hour*60+ +obj.minute};}
+function isOpen(p){var n=kalNow(),slot=p.hours_struct&&p.hours_struct[n.day],m=slot&&slot.match(/(\d\d):(\d\d)-(\d\d):(\d\d)/);if(!m)return false;var a=+m[1]*60+ +m[2],b=+m[3]*60+ +m[4];return n.mins>=a&&n.mins<b;}
+function yandexRoute(p){return 'https://yandex.ru/maps/?rtext='+HOME.lat+'%2C'+HOME.lng+'~'+p.lat+'%2C'+p.lng+'&rtt=auto';}
+function googleRoute(p){return 'https://www.google.com/maps/dir/?api=1&origin='+HOME.lat+','+HOME.lng+'&destination='+p.lat+','+p.lng+'&travelmode=driving';}
+function showPlace(p){var open=isOpen(p),card=document.getElementById('placeCard');card.innerHTML='<span class="open-badge '+(open?'open':'')+'">'+(open?'открыто сейчас':'сейчас закрыто')+'</span><h3>'+esc(p.name)+'</h3><div class="place-address">'+esc(p.address)+'</div><p>'+esc(p.description)+'</p><span class="label">Зачем идти</span><p>'+esc(p.why)+'</p><span class="label">Цена и график</span><p>'+esc(p.price)+'<br>'+esc(p.hours)+'</p><span class="label">Время</span><p>Закладывай ~'+p.duration_min+' минут.</p><span class="label">Инсайд</span><p>'+esc(p.tips)+'</p><div class="place-actions"><a class="primary" href="'+yandexRoute(p)+'" target="_blank" rel="noopener">Маршрут в Яндекс</a><a href="'+googleRoute(p)+'" target="_blank" rel="noopener">Google Maps</a>'+(p.website?'<a href="'+esc(p.website)+'" target="_blank" rel="noopener">Сайт</a>':'')+'</div>';}
+function filteredPlaces(){return PLACES.filter(function(p){return activeCat==='all'||p.category.indexOf(activeCat)>-1;});}
+function renderFilters(){var box=document.getElementById('placeFilters');box.innerHTML='';Object.keys(PLACE_CATS).forEach(function(k){var b=document.createElement('button');b.className='filter-btn'+(k===activeCat?' on':'');b.textContent=PLACE_CATS[k];b.addEventListener('click',function(){activeCat=k;renderFilters();renderMarkers();});box.appendChild(b);});}
+function renderMarkers(){if(!placeMap)return;placeMarkers.forEach(function(m){placeMap.removeLayer(m);});placeMarkers=[];var list=filteredPlaces();document.getElementById('placesMeta').textContent=list.length+' мест · время считается по Калининграду';list.forEach(function(p){var icon=L.divIcon({className:'place-marker '+(p.category[0]||'konigsberg'),iconSize:[28,28],iconAnchor:[14,14],popupAnchor:[0,-14]}),marker=L.marker([p.lat,p.lng],{icon:icon}).addTo(placeMap);marker.bindPopup('<b>'+esc(p.name)+'</b><br>'+esc(p.address));marker.on('click',function(){showPlace(p);});placeMarkers.push(marker);});if(list.length){placeMap.fitBounds(L.featureGroup(placeMarkers).getBounds().pad(.18),{animate:false});showPlace(list[0]);}}
+function initPlacesMap(){renderFilters();var meta=document.getElementById('placesMeta');if(!window.L){meta.textContent='Карта не загрузилась. Проверьте интернет: Leaflet и OpenStreetMap подключаются с CDN.';showPlace(PLACES[0]);return;}placeMap=L.map('placesMap',{scrollWheelZoom:false,attributionControl:true}).setView([54.711,20.512],13);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap'}).addTo(placeMap);L.circleMarker([HOME.lat,HOME.lng],{radius:7,color:'#e29a3c',weight:2,fillColor:'#141009',fillOpacity:1}).addTo(placeMap).bindPopup(HOME.name);renderMarkers();}
+initPlacesMap();
+
 /* ---------- DOT TOC + PROGRESS ---------- */
-var SECTS=[['hero','Начало'],['map','Карта эпох'],['why','Почему эксклав'],['eras','История'],['powers','Четыре силы'],['bridges','Мосты Эйлера'],['castle','3D-замок'],['route','Маршрут'],['today','Сегодня'],['quiz','Квиз']];
+var SECTS=[['hero','Начало'],['map','Карта эпох'],['why','Почему эксклав'],['eras','История'],['powers','Четыре силы'],['bridges','Мосты Эйлера'],['castle','3D-замок'],['places','Музеи и места'],['route','Маршрут'],['today','Сегодня'],['audio','Аудио'],['quiz','Квиз']];
 var dotnav=document.createElement('nav');
 dotnav.className='dotnav';
 dotnav.setAttribute('aria-label','Оглавление страницы');
